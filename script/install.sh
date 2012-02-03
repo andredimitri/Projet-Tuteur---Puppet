@@ -1,10 +1,18 @@
 #!/bin/bash
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#Formulaire
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+echo -n "Nombre de machine à réserver : "
+read nbr_nodes
+echo -n "Temps de la réservation (h:mm:ss) : "
+read tmps
+
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #Préparation des nodes
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 ##Réservation des machines
-oarsub -I -t deploy -l nodes=$1,walltime=$2
+oarsub -I -t deploy -l nodes=$nbr_nodes,walltime=$tmps
 ##Déploiement du système d'exploitation Debian Squeeze-x64-base sur les nodes
 kadeploy3 -e squeeze-x64-base -f $OAR_FILE_NODES -k ~/.ssh/id_dsa.pub
 ##Mise à jour des machines
@@ -19,7 +27,7 @@ cat $OAR_FILE_NODES | sort -u | head -n 1 >> nodes
 master=`sed -n "1 p" nodes`
 ##récupération et installtion du script depot_dashboard.sh
 ##Ajout du dépot apt.puppetlabs.com dans /etc/apt/sources.list
-scp depot_dashboard.sh root@$master:~/
+scp $USER/scripts/depot_dashboard.sh root@$master:~/
 taktuk -m $master broadcast exec [ sh ~/depot_dashboard.sh ]
 ##installation via APT des paquets serveur et agent de puppet. Notre serveur sera aussi son propre client
 taktuk -m $master broadcast exec [ apt-get -y install puppet facter puppetmaster puppet-dashboard ]
@@ -71,16 +79,13 @@ do
 	taktuk -m $master broadcast exec [ puppet cert --sign $client ]
 done
 ##rapatriement des catalogues/modules/manifests sur le master
-scp -r -p modules/ root@$master:/etc/puppet/
+scp -r -p $USER/ressources/modules/ root@$master:/etc/puppet/
 ##attribution des rôles aux clients
 dns=`sed -n "1 p" clients`
 mysql=`sed -n "2 p" clients`
 ##ajout des clients dans nodes.pp
 taktuk -m $master broadcast exec [ echo "node '"$dns"' { include dns }" >> /etc/puppet/manifests/nodes.pp ]
 taktuk -m $master broadcast exec [ echo "node '"$mysql"' { include mysql }" >> /etc/puppet/manifests/nodes.pp ]
-for client in $(cat clients)
-do
-	###récupération des catalogues
-	taktuk -m $client broadcast exec [ puppet agent --test ]
-done
-
+###récupération des catalogues
+taktuk -m $dns broadcast exec [ puppet agent --test ]
+taktuk -m $mysql broadcast exec [ puppet agent --test ]
