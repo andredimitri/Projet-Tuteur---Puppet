@@ -1,0 +1,31 @@
+== KaVLAN local ==
+1/ Réservation kavlan-local (non routé, local au site).
+$ oarsub -t deploy -l {"type='kavlan-local'"}/vlan=1+/nodes=3,walltime=05:10:00 -I
+2/ Déploiement
+2.1/ Activation dhcp
+$ kavlan -e
+2.2/ Visualisation des noeuds
+$ kavlan -l
+2.3/ Déploiement
+$ kadeploy3 -f $OAR_NODEFILE -e squeeze-x64-min --vlan 2 -d -V4 -k # remplacer le numéro de vlan
+2.4/ Vérification
+$ kavlan -g -f $OAR_NODEFILE
+Ou
+$ curl -kni https://api-proxy.nancy.grid5000.fr/2.1/grid5000/sites/nancy/vlans/nodes/graphene-142.nancy.grid5000.fr
+3/ Copie des clées
+scp .ssh/id_dsa* root@griffon-80-kavlan-1:~/.ssh/
+4/ Création du tunnel
+(fnancy)$ ssh root@griffon-80-kavlan-1
+(griffon-80-kavlan-1)$ ssh -L 8080:proxy:3128 sbadia@192.168.207.254 #ip de la default gw (route -n)
+(kavlan-1)$ ssh root@griffon-80-kavlan-1
+(griffon-80-kavlan-1)$ apt-get -o 'Acquire::http::Proxy="http://localhost:8080"' update
+
+=== Ssh config file ===
+Host *-*-kavlan-1 *-*-kavlan-1.*.grid5000.fr
+    ProxyCommand ssh -a -x kavlan-1 nc -q 0 %h %p
+
+Host *-*-kavlan-2 *-*-kavlan-2.*.grid5000.fr
+    ProxyCommand ssh -a -x kavlan-2 nc -q 0 %h %p
+
+Host *-*-kavlan-3 *-*-kavlan-3.*.grid5000.fr
+    ProxyCommand ssh -a -x kavlan-3 nc -q 0 %h %p
