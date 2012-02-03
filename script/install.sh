@@ -37,7 +37,6 @@ scp depot_dashboard.sh root@$master:~/
 scp $USER/scripts/depot_dashboard.sh root@$master:~/
 
 =======
-<<<<<<< HEAD
 scp depot_dashboard.sh root@$master:~/
 =======
 scp $USER/scripts/depot_dashboard.sh root@$master:~/
@@ -60,12 +59,9 @@ do
 	taktuk -m $client broadcast exec [ apt-get -y install puppet facter ]
 
 =======
-<<<<<<< HEAD
   taktuk -m $client broadcast exec [ apt-get -y install puppet facter ]
 =======
 	taktuk -m $client broadcast exec [ apt-get -y install puppet facter ]
->>>>>>> c6fedf928fe3c1b129ed8b9dacb940fc54ba6364
->>>>>>> d139c2d7f75d22be6ee9c5428f5599574c7db979
 done
 
 
@@ -118,11 +114,8 @@ mysql=`sed -n "2 p" clients`
 ##ajout des clients dans nodes.pp
 taktuk -m $master broadcast exec [ echo "node '"$dns"' { include dns }" >> /etc/puppet/manifests/nodes.pp ]
 taktuk -m $master broadcast exec [ echo "node '"$mysql"' { include mysql }" >> /etc/puppet/manifests/nodes.pp ]
-<<<<<<< HEAD
 
 =======
-<<<<<<< HEAD
->>>>>>> d139c2d7f75d22be6ee9c5428f5599574c7db979
 for client in $(cat clients)
 do
 	###récupération des catalogues
