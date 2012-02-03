@@ -6,6 +6,6 @@ s1) Semaine du 23/01 au 27/01:
 
 s2) Semaine du 30/01 au 03/02:
 - Première prise en main de puppet pour Dimitri et Quentin,
-- Installation manuel de puppet sur le grid5000 réussite avec 3nodes,
+- Installation manuelle de puppet sur le grid5000 réussite avec 3 noeuds,
 - Mise en place d'un script automatique de réservation de machines, installation du puppetmaster et des clients,
 - Création des modules Dns et MySQL.
