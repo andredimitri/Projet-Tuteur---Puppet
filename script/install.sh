@@ -1,9 +1,4 @@
 #!/bin/bash
-
-#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-##Réservation des machines
-oarsub -I -t deploy -l nodes=$1,walltime=$2
-
 #Formulaire
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 echo -n "Nombre de machine à réserver : "
@@ -16,7 +11,12 @@ read tmps
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 ##Réservation des machines
 oarsub -I -t deploy -l nodes=$nbr_nodes,walltime=$tmps
+#oarsub -t deploy -l {"type='kavlan-local'"}/vlan=1+/nodes=$nbr_nodes,walltime=$tmps -I
 
+##Activation du dhcp
+#kavlan -e
+## Récupération de l'id du vlan
+#vlan=kavlan -V
 ##Déploiement du système d'exploitation Debian Squeeze-x64-base sur les nodes
 kadeploy3 -e squeeze-x64-base -f $OAR_FILE_NODES -k ~/.ssh/id_dsa.pub
 ##Mise à jour des machines
