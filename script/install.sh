@@ -24,16 +24,10 @@ echo "---"
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #Création des tunnels 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+taktuk -l taktuk -l root -m $list_nodes broadcast exec [route -n | grep 0.0.0.0 |cut -d  ' ' -f 10 >> $HOME/scripts/ip.txt]
+taktuk -l root -m $list_nodes broadcast exec[ssh -L 8080:proxy:3128 root@<$HOME/scripts/ip.txt]
+taktuk -l root -m $list_nodes broadcast exec [ apt-get -o 'Acquire::http::Proxy="http://localhost:8080"' update]
 
-for node in $list_nodes
-do
-	ssh root@node
-	ipgw = route -n
-	ssh -L 8080:proxy:3128 root@ipgw
-	ssh root@node #demander user ou connexion en root possible ????
-	apt-get -o 'Acquire::http::Proxy="http://localhost:8080"' update
-done
-echo "---"
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #Installation du master puppet
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
