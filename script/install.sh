@@ -3,15 +3,17 @@
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #Préparation des nodes
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-cat $OAR_FILE_NODES | sort -u  > $HOME/scripts/fichiers/list_nodes
+cat kavlan -l | sort -u  > $HOME/scripts/fichiers/list_nodes
 list_nodes="$HOME/scripts/fichiers/list_nodes"
 ##Déploiement du système d'exploitation Debian Squeeze-x64-base sur les nodes
 echo "---"
 echo "Liste des machines réservé:"
 cat $list_nodes
 echo "---"
-echo "Déploiement de l'environnement Linux, Debian Squeeze 64bit, sur toutes les machines réservé.(Peut prendre plusieurs minutes)"
-kadeploy3 -e squeeze-x64-base -f $list_nodes -k .ssh/id_dsa.pub
+#Récupération du numéro de vlan pour le déploiement
+vlan = kavlan -V
+echo "Déploiement de l'environnement Linux, Debian Squeeze 64bit, sur toutes les machines réservé et dans le vlan utilisé.(Peut prendre plusieurs minutes)"
+ kadeploy3 -f $list_nodes -e squeeze-x64-base --vlan $vlan -d -V4 -k .ssh/id_dsa.pub
 echo "Copie des clés SSH vers toutes les machines."
 for node in $(cat $list_nodes)
 do
@@ -19,7 +21,19 @@ do
 done
 echo "---"
 
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#Création des tunnels 
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
+for node in $list_nodes
+do
+	ssh root@node
+	ipgw = route -n
+	ssh -L 8080:proxy:3128 root@ipgw
+	ssh root@node #demander user ou connexion en root possible ????
+	apt-get -o 'Acquire::http::Proxy="http://localhost:8080"' update
+done
+echo "---"
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #Installation du master puppet
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
