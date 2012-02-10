@@ -24,7 +24,8 @@ echo "---"
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #Création des tunnels 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-taktuk -l root -m $list_nodes broadcast exec [ route -n | grep 0.0.0.0 |cut -d  ' ' -f 10 >> home/scripts/ip.txt ]
+taktuk -l root -m $list_nodes broadcast exec [ touch /home/ip.txt ]
+taktuk -l root -m $list_nodes broadcast exec [ route -n | grep 0.0.0.0 |cut -d  ' ' -f 10 >> /home/ip.txt ]
 taktuk -l root -m $list_nodes broadcast exec[ ssh -L 8080:proxy:3128 root@<home/scripts/ip.txt ]
 taktuk -l root -m $list_nodes broadcast exec [ apt-get -o 'Acquire::http::Proxy="http://localhost:8080"' update ]
 
