@@ -3,7 +3,7 @@
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #Préparation des nodes
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-cat kavlan -l | sort -u  > $HOME/scripts/fichiers/list_nodes
+cat kavlan -l -j | sort -u  > $HOME/scripts/fichiers/list_nodes
 list_nodes="$HOME/scripts/fichiers/list_nodes"
 ##Déploiement du système d'exploitation Debian Squeeze-x64-base sur les nodes
 echo "---"
