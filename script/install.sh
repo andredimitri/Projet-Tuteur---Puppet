@@ -11,7 +11,7 @@ echo "Liste des machines réservé:"
 cat $list_nodes
 echo "---"
 #Récupération du numéro de vlan pour le déploiement
-vlan = kavlan -V
+vlan=`kavlan -V`
 echo "Déploiement de l'environnement Linux, Debian Squeeze 64bit, sur toutes les machines réservé et dans le vlan utilisé.(Peut prendre plusieurs minutes)"
  kadeploy3 -f $list_nodes -e squeeze-x64-base --vlan $vlan -d -V4 -k .ssh/id_dsa.pub
 echo "Copie des clés SSH vers toutes les machines."
@@ -24,9 +24,9 @@ echo "---"
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #Création des tunnels 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-taktuk -l taktuk -l root -m $list_nodes broadcast exec [route -n | grep 0.0.0.0 |cut -d  ' ' -f 10 >> $HOME/scripts/ip.txt]
-taktuk -l root -m $list_nodes broadcast exec[ssh -L 8080:proxy:3128 root@<$HOME/scripts/ip.txt]
-taktuk -l root -m $list_nodes broadcast exec [ apt-get -o 'Acquire::http::Proxy="http://localhost:8080"' update]
+taktuk -l root -m $list_nodes broadcast exec [ route -n | grep 0.0.0.0 |cut -d  ' ' -f 10 >> home/scripts/ip.txt ]
+taktuk -l root -m $list_nodes broadcast exec[ ssh -L 8080:proxy:3128 root@<home/scripts/ip.txt ]
+taktuk -l root -m $list_nodes broadcast exec [ apt-get -o 'Acquire::http::Proxy="http://localhost:8080"' update ]
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #Installation du master puppet
