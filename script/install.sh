@@ -10,8 +10,6 @@ error="$HOME/scripts/fichiers/error.log"
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #Mise en place de KaVLAN
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-##Activation du dhcp
-kavlan -e
 ##Récupération du numéro VLAN
 jobid=`oarstat | grep $USER | cut -d' ' -f1`
 vlan=`kavlan -V -j $jobid `
@@ -107,6 +105,7 @@ taktuk -l root -m $puppetmaster broadcast exec [ puppet cert --sign --all ] 2>> 
 scp -R $HOME/puppet/ressources/modules/ root@$puppetmaster:/etc/puppet/
 ##attribution des rôles aux clients et ajout des clients dans nodes.pp
 taktuk -l root -m $puppetmaster broadcast exec [ "bind=`sed -n '2 p' list_nodes`; echo node '$bind' { include bind } >> /etc/puppet/manifests/nodes.pp" ] 2>> $error
+taktuk -l root -m $puppetmaster broadcast exec [ "dhcp=`sed -n '4 p' list_nodes`; echo node '$dhcp' { include dhcp } >> /etc/puppet/manifests/nodes.pp" ] 2>> $error
 taktuk -l root -m $puppetmaster broadcast exec [ "mysql=`sed -n '3 p' list_nodes`; echo node '$mysql' { include mysql } >> /etc/puppet/manifests/nodes.pp" ] 2>> $error
 taktuk -l root -m $puppetmaster broadcast exec [ "nfs=`sed -n '4 p' list_nodes`; echo node '$nfs' { include nfs } >> /etc/puppet/manifests/nodes.pp" ] 2>> $error
 ###récupération des catalogues
