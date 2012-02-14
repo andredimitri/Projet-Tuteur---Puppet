@@ -1,0 +1,15 @@
+class bind::install {
+package { "bind9":
+ensure => present,
+}
+}
+
+
+import 'install.pp'
+import 'config.pp'
+import 'service.pp'
+
+class bind {
+include bind::install,bind::service
+}
+
