@@ -1,8 +1,3 @@
-class bind::install {
-package { "bind9":
-ensure => present,
-}
-}
 class bind::service {
 service { "bind":
 ensure => running,
@@ -12,7 +7,3 @@ enable => true,
 require => Class["bind::install"],
 }
 }
-class bind {
-include bind::install,bind::service
-}
-

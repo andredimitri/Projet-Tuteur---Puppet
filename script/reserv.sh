@@ -14,5 +14,4 @@ read tmps
 #Réservation des machines
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 echo "Réservation de "$nbr_nodes" machine(s) pour "$tmps" heure(s)."
-#oarsub -I -t deploy -l nodes=$nbr_nodes,walltime=$tmps -n "$nom"
 oarsub -I -t deploy -l {"type='kavlan-local'"}/vlan=1+/nodes=$nbr_nodes,walltime=$tmps -n "$nom"
