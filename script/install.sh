@@ -129,14 +129,14 @@ taktuk -l root -m $puppetmaster broadcast exec [ puppet cert --sign --all ]
 echo "Rapartriement des catalogues/modules/manifests sur "$puppetmaster
 scp $modules/ root@$puppetmaster:/etc/puppet/
 ##attribution des rôles aux clients et ajout des clients dans nodes.pp
-<<<<<<< HEAD
+
 taktuk -l root -m $puppetmaster broadcast exec [ "bind=`sed -n '2 p' list_nodes`; echo node '$bind' { include bind } >> /etc/puppet/manifests/nodes.pp" ] 2>> $error
 taktuk -l root -m $puppetmaster broadcast exec [ "dhcp=`sed -n '4 p' list_nodes`; echo node '$dhcp' { include dhcp } >> /etc/puppet/manifests/nodes.pp" ] 2>> $error
 taktuk -l root -m $puppetmaster broadcast exec [ "mysql=`sed -n '3 p' list_nodes`; echo node '$mysql' { include mysql } >> /etc/puppet/manifests/nodes.pp" ] 2>> $error
 taktuk -l root -m $puppetmaster broadcast exec [ "nfs=`sed -n '4 p' list_nodes`; echo node '$nfs' { include nfs } >> /etc/puppet/manifests/nodes.pp" ] 2>> $error
 ###récupération des catalogues
 taktuk -l root -f $puppetclients broadcast exec [ puppet agent --test ] 2>> $error
-=======
+
 echo "Attribution des rôles :"
 echo "- "`sed -n '2 p' $list_nodes `" : bind9,"
 taktuk -l root -m $puppetmaster broadcast exec [ "bind=`sed -n '2 p' /root/list_nodes`; echo node '$bind' { include bind } >> /etc/puppet/manifests/nodes.pp" ]
@@ -147,4 +147,4 @@ taktuk -l root -m $puppetmaster broadcast exec [ "nfs=`sed -n '4 p' /root/list_n
 ###récupération des catalogues
 taktuk -l root -m $puppetmaster broadcast exec [ "echo import 'nodes' >> /etc/puppet/manifests/site.pp" ]
 taktuk -l root -f $puppetclients broadcast exec [ puppet agent --test ]
->>>>>>> 36eb05339366be2a316a554aa771ad19d89462b2
+
