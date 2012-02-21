@@ -46,15 +46,15 @@ echo "Vérification de la configuration ssh de l'utilisateur "$USER
 config_ssh >> $HOME/.ssh/config
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#Préparation des nodes (KaVLAN-edit)
+#Préparation des nodes (KaVLAN-edit)à
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 ##Déploiement du système d'exploitation Debian Squeeze-x64-base sur les nodes
 echo "---"
-echo "Liste des machines réservé:"
+echo "Liste des machines réservées:"
 kavlan -l
 if [ $choix == "n" ]; then kavlan -l > $list_nodes; fi
 echo "---"
-echo "Déploiement de l'environnement Linux, Debian Squeeze 64bit, sur toutes les machines réservé (Peut prendre plusieurs minutes)."
+echo "Déploiement de l'environnement Linux, Debian Squeeze 64bit, sur toutes les machines réservées (Peut prendre plusieurs minutes)."
 kadeploy3 -e squeeze-x64-base -f $OAR_FILE_NODES --vlan $vlan -d -V4 -k $HOME/.ssh/id_dsa.pub
 echo "Copie des clés SSH vers toutes les machines."
 cat $HOME/.ssh/id_dsa.pub >> $HOME/.ssh/authorized_keys
@@ -120,13 +120,13 @@ done
 #Déploiement des catalogues
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 ##synchronisations clients <-> master
-###envoie des demandes de certificat
+###envoi des demandes de certificat
 echo "Déploiement des catalogues."
 taktuk -l root -f $puppetclients broadcast exec [ puppet agent --test ]
 ###signature des certificats
 taktuk -l root -m $puppetmaster broadcast exec [ puppet cert --sign --all ]
 ##rapatriement des catalogues/modules/manifests sur le master
-echo "Rapartriement des catalogues/modules/manifests sur "$puppetmaster
+echo "Rapatriement des catalogues/modules/manifests sur "$puppetmaster
 scp $modules/ root@$puppetmaster:/etc/puppet/
 ##attribution des rôles aux clients et ajout des clients dans nodes.pp
 
