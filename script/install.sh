@@ -61,19 +61,20 @@ cat $HOME/.ssh/id_dsa.pub >> $HOME/.ssh/authorized_keys
 echo $USER > $HOME/username
 for node in $(cat $list_nodes)
 do
-	taktuk -l root -s -m $node broadcast exec [ 'cat ~/.ssh/id_dsa.pub >> ~/.ssh/authorized_keys' ]
 	scp $HOME/.ssh/id_dsa* root@$node:~/.ssh/
 	scp $HOME/username root@$node:~/
 done
+taktuk -l root -s -m $node broadcast exec [ 'cat ~/.ssh/id_dsa.pub >> ~/.ssh/authorized_keys' ]
 echo "---"
 
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #Création des tunnels
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-taktuk -l root -s -f $puppetclients broadcast exec [ 'user=`cat username`; ssh -L 8080:proxy:3128 $user@`route -n | grep UG | tr -s " " | cut -d " " -f2`' ]                                  
-taktuk -l root -s -f $puppetclients broadcast exec [ apt-get -o 'Acquire::http::Proxy="http://localhost:8080"' update ]
-
+echo "Création des tunnels ssh"
+taktuk -l root -s -f $list_nodes broadcast exec [ 'ssh -L 8080:proxy:3128 `cat username`@`route -n | grep UG | tr -s " " | cut -d " " -f2`' ]                                   
+taktuk -l root -s -f $list_nodes broadcast exec [ apt-get -o 'Acquire::http::Proxy="http://localhost:8080"' update ]
+echo "---"
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #Installation du master puppet
