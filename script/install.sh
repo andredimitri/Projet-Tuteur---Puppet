@@ -61,10 +61,10 @@ cat $HOME/.ssh/id_dsa.pub >> $HOME/.ssh/authorized_keys
 echo $USER > $HOME/username
 for node in $(cat $list_nodes)
 do
-	taktuk -l root -s -m $node broadcast exec [ 'cat ~/.ssh/id_dsa.pub >> ~/.ssh/authorized_keys' ]
 	scp $HOME/.ssh/id_dsa* root@$node:~/.ssh/
 	scp $HOME/username root@$node:~/
 done
+taktuk -l root -s -m $node broadcast exec [ 'cat ~/.ssh/id_dsa.pub >> ~/.ssh/authorized_keys' ]
 echo "---"
 
 
