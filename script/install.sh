@@ -72,7 +72,7 @@ echo "---"
 #Création des tunnels
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 echo "Création des tunnels ssh"
-taktuk -l root -s -f $list_nodes broadcast exec [ 'ssh -L 8080:proxy:3128 `cat username`@`route -n | grep UG | tr -s " " | cut -d " " -f2`' ]                                   
+taktuk -l root -s -f $list_nodes broadcast exec [ 'user=`cat username`; ssh -L 8080:proxy:3128 $user@`route -n | grep UG | tr -s " " | cut -d " " -f2`' ] 
 taktuk -l root -s -f $list_nodes broadcast exec [ apt-get -o 'Acquire::http::Proxy="http://localhost:8080"' update ]
 echo "---"
 
