@@ -24,17 +24,17 @@ $ tree
 				 		 |--	bind/
 				 		 |--	mysql/
 				 		 |--	oar/
-				 		 \--	kadeploy/
-				 \-- fichiers/
+				 		 |--	kadeploy/
+				 |-- fichiers/
 				 		 |--	puppetmaster
-				 		 \--	puppetclient
-		\-- scripts/	 
+				 		 |--	puppetclient
+		|-- scripts/	 
 				 |-- master_config.sh
 				 |-- clients_config.sh
-				 \-- depot_dashboard.sh
+				 |-- depot_dashboard.sh
 	scripts/
 		|-- fichiers/
 				 |-- list_nodes
 		|-- install.sh
-		\-- reserv.sh 
+		|-- reserv.sh 
 
