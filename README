@@ -24,7 +24,7 @@ $ tree
 				 		 |--	bind/
 				 		 |--	mysql/
 				 		 |--	oar/
-				 		 \--	kadeploy/
+				 		 |--	kadeploy/
 				 |-- fichiers/
 				 		 |--	puppetmaster
 				 		 |--	puppetclient
