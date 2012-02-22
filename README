@@ -36,5 +36,5 @@ $ tree
 		|-- fichiers/
 				 |-- list_nodes
 		|-- install.sh
-		--- reserv.sh 
+		|-- reserv.sh 
 
