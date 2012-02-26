@@ -1,0 +1,30 @@
+Paquets dispo sur grid5000, ou sur la forge INRIA.
+ - https://gforge.inria.fr/frs/?group_id=2026
+ - deb http://apt.grid5000.fr/kadeploy /
+
+== Base (sources/packages) ==
+- Default:
+  * Packages: ruby,taktuk,libmysql-ruby1.8,bittorrent,ctorrent,kadeploy-common
+  * User: deploy
+
+- Frontend:
+  * Packages: kadeploy-client
+
+- Server:
+  * Packages: kadeploy-server,tftpd-hpa,syslinux
+  * Files-TFTP: chain.c32,mboot.c32,pxelinux.0,gpxelinux.0 (voir /usr/lib/syslinux).
+
+== Config. ==
+- Frontend:
+  * Files: /etc/kadeploy3/client_conf
+
+- Server:
+  * Files: /etc/kadeploy3/{conf,clusters,cmd,nodes}, (deploy) ~/.ssh/authorized_keys
+  * Cluster cfg: /etc/kadeploy3/{specific_conf_,partition_file_}
+  * Services: MySQL
+
+=== Tips ===
+  * TFTPD opts: OPTIONS="-l -c -s /var/lib/tftpboot -u deploy -vvv"
+  * MySQL: INSERT INTO rights (user,node,part) VALUES('root','*','*');
+
+  * Voir: http://wiki.sebian.fr/doku.php?id=cluster-esial:kadeploy
