@@ -1,0 +1,31 @@
+== Base (sources/packages) ==
+- Frontend:
+  * Apt: sources oar (http://oar-ftp.imag.fr/oar/2.4/debian/)
+  * Packages: oar-common, oar-keyring, oar-doc, oar-user, oar-node, taktuk
+
+- Server:
+  * Apt: sources oar (http://oar-ftp.imag.fr/oar/2.4/debian/)
+  * Packages: oar-common, oar-keyring, oar-admin, oar-server
+
+- Www: (peut être rassemblé avec Server).
+  * Apt: sources oar (http://oar-ftp.imag.fr/oar/2.4/debian/)
+  * Packages: oar-keyring, oar-web-status, apache2
+
+== Config. ==
+- Frontend:
+  * Files: /etc/oar/{prologue,epilogue}, (oar) ~/.ssh/{config,authorized_keys,id_rsa}
+  * User: oar
+- Web:
+  * Files: /etc/oar/{monika,drawgantt}.cgi
+- Server:
+  * User: oar
+  * Files: /etc/oar/oar.conf, (oar) ~/.ssh/config
+  * Services: MySQL, oar-server (pattern => "Almighty")
+
+=== Tips ===
+  * SSH: Deux clées:
+    - une serveur et frontend -> environment="OAR_KEY=1"
+    - une noeuds -> environment="OAR_KEY=1",command="/etc/oar/oarnodesetting_ssh"
+  * Nodes: (sshd)
+    - AcceptEnv OAR_CPUSET OAR_JOB_USER
+    - PermitUserEnvironment yes
