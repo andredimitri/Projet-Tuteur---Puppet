@@ -4,13 +4,13 @@ s1) Semaine du 23/01 au 27/01:
 - Première rencontre avec notre tuteur, Sébastien Badia,
 - Découverte du grid5000: réalisation des tutorials "starter".
 
-s2) Semaine du 30/01 au 03/02:
+s2) Semaine du 30/01 au 03/02 :
 - Première prise en main de puppet pour Dimitri et Quentin,
 - Installation manuel de puppet sur le grid5000 réussite avec 3nodes,
 - Mise en place d'un script automatique de réservation de machines, installation du puppetmaster et des clients,
 - Création des modules Dns et MySQL.
 
-s3) Semaine du 06/02 au 10/02:
+s3) Semaine du 06/02 au 10/02 :
 - Test d'utilisation de KaVLAN.
 - Création du module NFS pour puppet.
 - Fin du script automatique de reservation des nodes (reserv.sh), ainsi que l'installation et configuration de puppet
@@ -37,4 +37,7 @@ $ tree
 				 |-- list_nodes
 		|-- install.sh
 		|-- reserv.sh 
-
+		
+s4) Semaine du 12/02 au 16/02 : 
+ - correction de problèmes dans les scripts.
+ - rédaction du rapport de mi-projet.
