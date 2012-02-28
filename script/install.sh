@@ -72,7 +72,8 @@ echo "---"
 #Création des tunnels
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 echo "Création des tunnels ssh"
-taktuk -l root -s -f $list_nodes broadcast exec [ 'user=`cat username`; ssh -L 8080:proxy:3128 $user@`route -n | grep UG | tr -s " " | cut -d " " -f2`' ] 
+#taktuk -l root -s -f $list_nodes broadcast exec [ 'user=`cat username`; ssh -NL 8080:proxy:3128 $user@`route -n | grep UG | tr -s " " | cut -d " " -f2` &>/dev/null &' ]
+taktuk -l root -s -f $list_nodes broadcast exec [ "user=`cat username`; ssh -NL 8080:proxy:3128 $user@`/sbin/ip route | awk '/default/{ print $3 }'` &>/dev/null &" ]
 taktuk -l root -s -f $list_nodes broadcast exec [ apt-get -o 'Acquire::http::Proxy="http://localhost:8080"' update ]
 echo "---"
 
@@ -92,7 +93,7 @@ taktuk -l root -s -m $puppetmaster broadcast exec [ apt-get -q -y install puppet
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 ##récupération des nodes clientes
 if [ $choix == "n" ]; then cat $list_nodes | tail -n +2 >> $puppetclients; fi
-##installation via APT des paquets agent de puppet pour les clients 
+##installation via APT des paquets agent de puppet pour les clients
 echo "Installation des paquets sur les machines clientes"
 taktuk -l root -s -f $puppetclients broadcast exec [ apt-get -q -y install puppet facter ]
 
@@ -142,7 +143,7 @@ echo "Attribution des rôles :"
 echo "- "`sed -n '2 p' $list_nodes `" : bind9,"
 taktuk -l root -m $puppetmaster broadcast exec [ "bind=`sed -n '2 p' /root/list_nodes`; echo node '$bind' { include bind } >> /etc/puppet/manifests/nodes.pp" ]
 echo "- "`sed -n '3 p' $list_nodes `" : MySQL,"
-taktuk -l root -m $puppetmaster broadcast exec [ "mysql=`sed -n '3 p' /root/list_nodes`; echo node '$mysql' { include mysql } >> /etc/puppet/manifests/nodes.pp" ] 
+taktuk -l root -m $puppetmaster broadcast exec [ "mysql=`sed -n '3 p' /root/list_nodes`; echo node '$mysql' { include mysql } >> /etc/puppet/manifests/nodes.pp" ]
 echo "- "`sed -n '4 p' $list_nodes `" : NFS."
 taktuk -l root -m $puppetmaster broadcast exec [ "nfs=`sed -n '4 p' /root/list_nodes`; echo node '$nfs' { include nfs } >> /etc/puppet/manifests/nodes.pp" ]
 ###récupération des catalogues
