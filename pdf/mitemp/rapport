@@ -1,0 +1,50 @@
+\documentclass[a4paper, 10pt, onecolumn]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage[OT1]{fontenc}
+\usepackage[french]{babel}
+\usepackage[dvipsnames, table]{xcolor}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{calc}
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{array}
+\usepackage{rotating}
+\usepackage{hyperref}
+\usepackage{makeidx}
+
+\hypersetup{
+colorlinks=true,
+linkcolor=midnight,           
+}
+
+\makeindex
+
+\begin{document}
+
+\newcommand{\bold}[1]{\textbf{#1}}
+\newcommand{\italic}[1]{\textit{#1}}
+\newcommand{\surligne}[1]{\underline{#1}}
+\newcommand{\couleur}[1]{\textcolor{#1}}
+\newcommand{\maj}[1]{\textsc{#1}}
+\newcommand{\machine}[1]{\texttt{#1}}
+\newcommand{\be}{\begin{enumerate}}
+\newcommand{\ee}{\end{enumerate}}
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\ei}{\end{itemize}}
+
+\pagenumbering{arabic}
+\xdefinecolor{midnight}{named}{MidnightBlue}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Riwan Blondé}
+\rhead{\leftmark}
+\rfoot{\thepage}
+\lfoot{\italic{Compilé avec Winefish}}
+
+
+\printindex
+
+
+
+\end{document}
