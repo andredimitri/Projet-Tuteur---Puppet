@@ -41,3 +41,8 @@ $ tree
 s4) Semaine du 12/02 au 16/02 : 
  - correction de problèmes dans les scripts.
  - rédaction du rapport de mi-projet.
+
+s5) Semaine du 26/02 au 02/03 :
+ - Ajout du module OAR dans Puppet (installation et configuration).
+ - Fixation du problème de Tunnel SSH avec Taktuk.
+ - Installation par le script de Puppet et du PuppetMaster sur les noeuds.
