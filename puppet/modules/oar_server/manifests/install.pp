@@ -1,14 +1,8 @@
 class oar_server::install {
-package { "oar-common:
+package {  ["oar-common","oar-keyring","oar-admin","oar-server"]:
 ensure => installed,
-}
-package { "oar-keyring":
-ensure => installed,
-}
-package { "oar-admin:
-ensure => installed,
-}
-package { "oar-server":
+
+package { ["oar-web-status","apache2"]:
 ensure => installed,
 }
 }
