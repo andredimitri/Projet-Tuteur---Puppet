@@ -85,7 +85,7 @@ if [ $choix == "n" ]; then sed -n "1 p" $list_nodes > $puppetmasters; fi
 puppetmaster=`cat $puppetmasters `
 ##installation via APT des paquets serveur et agent de puppet. Notre serveur sera aussi son propre client
 echo "Installation des paquets sur le serveur: "$puppetmaster
-taktuk -l root -s -m $puppetmaster broadcast exec [ apt-get -q -y install puppet facter puppetmaster ]
+taktuk -l root -s -m $puppetmaster broadcast exec [ apt-get -q -y -o 'Acquire::http::Proxy="http://localhost:8080"' install puppet facter puppetmaster ]
 
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -95,7 +95,7 @@ taktuk -l root -s -m $puppetmaster broadcast exec [ apt-get -q -y install puppet
 if [ $choix == "n" ]; then cat $list_nodes | tail -n +2 >> $puppetclients; fi
 ##installation via APT des paquets agent de puppet pour les clients
 echo "Installation des paquets sur les machines clientes"
-taktuk -l root -s -f $puppetclients broadcast exec [ apt-get -q -y install puppet facter ]
+taktuk -l root -s -f $puppetclients broadcast exec [ apt-get -q -y -o 'Acquire::http::Proxy="http://localhost:8080"' install puppet facter ]
 
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
