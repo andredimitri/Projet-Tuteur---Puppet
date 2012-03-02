@@ -15,8 +15,6 @@
 - Frontend:
   * Files: /etc/oar/{prologue,epilogue}, (oar) ~/.ssh/{config,authorized_keys,id_rsa}
   * User: oar
-  
-  
 - Web:
   * Files: /etc/oar/{monika,drawgantt}.cgi
 - Server:
