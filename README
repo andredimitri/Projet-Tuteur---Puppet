@@ -1,4 +1,4 @@
-Carnet de route;
+arnet de route;
 
 s1) Semaine du 23/01 au 27/01:
 - Première rencontre avec notre tuteur, Sébastien Badia,
@@ -17,28 +17,28 @@ s3) Semaine du 06/02 au 10/02 :
 sur le serveur puppet master et sur les puppet clients:
 
 $ tree
-	puppet/	
-		|-- ressources/
-				 |-- modules/
-				 		 |--	nfs/
-				 		 |--	bind/
-				 		 |--	mysql/
-				 		 |--	oar/
-				 		 |--	kadeploy/
-				 |-- fichiers/
-				 		 |--	puppetmaster
-				 		 |--	puppetclient
-		|-- scripts/	 
-				 |-- master_config.sh
-				 |-- clients_config.sh
-				 |-- depot_dashboard.sh
-	scripts/
-		|-- fichiers/
-				 |-- list_nodes
-		|-- install.sh
-		|-- reserv.sh 
-		
-s4) Semaine du 12/02 au 16/02 : 
+puppet/
+|-- ressources/
+|-- modules/
+|-- nfs/
+|-- bind/
+|-- mysql/
+|-- oar/
+|-- kadeploy/
+|-- fichiers/
+|-- puppetmaster
+|-- puppetclient
+|-- scripts/
+|-- master_config.sh
+|-- clients_config.sh
+|-- depot_dashboard.sh
+scripts/
+|-- fichiers/
+|-- list_nodes
+|-- install.sh
+|-- reserv.sh
+
+s4) Semaine du 12/02 au 16/02 :
  - correction de problèmes dans les scripts.
  - rédaction du rapport de mi-projet.
 
