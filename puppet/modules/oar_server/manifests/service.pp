@@ -1,5 +1,5 @@
 class oar_server::service {
-service { "oar_server":
+service { "oar-server":
 ensure => running,
 hasstatus => true,
 hasrestart => true,

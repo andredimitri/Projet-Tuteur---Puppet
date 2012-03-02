@@ -1,5 +1,5 @@
 class bind::service {
-service { "bind":
+service { "bind9":
 ensure => running,
 hasstatus => true,
 hasrestart => true,

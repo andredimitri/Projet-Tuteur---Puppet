@@ -1,9 +1,9 @@
-class nfs::service {
-service { "nfs":
+class oar_server::service {
+service { "oar_server":
 ensure => running,
 hasstatus => true,
 hasrestart => true,
 enable => true,
-require => Class["nfs::install"],
+require => Class["oar_server::install"],
 }
 }

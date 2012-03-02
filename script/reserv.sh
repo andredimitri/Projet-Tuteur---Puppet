@@ -5,7 +5,7 @@
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 echo -n "Nom de la réservation : "
 read nom
-echo -n "Nombre de machines à réserver : "
+echo -n "Nombre de machine à réserver : "
 read nbr_nodes
 echo -n "Temps de la réservation (h:mm:ss) : "
 read tmps
