@@ -12,7 +12,7 @@ ptions {
         // the all-0's placeholder.
 
         // forwarders {
-        //      131.254.203.235
+        //      #adresse du forwarder
         // };
 
         auth-nxdomain no;    # conform to RFC1035
