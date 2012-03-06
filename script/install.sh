@@ -92,7 +92,7 @@ do
 	scp $HOME/username root@$node:~/
 	scp $install_scripts/tunnel.sh root@$node:~/
 done
-rm username
+rm $HOME/username
 
 kavlan -l > $list_nodes
 taktuk -l root -s -f $list_nodes broadcast exec [ 'sh tunnel.sh; rm tunnel.sh username' ] &>/dev/null
