@@ -86,7 +86,7 @@ done
 #Création des tunnels
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 echo "Création des tunnels SSH."
-echo $USER > username
+echo $USER > $HOME/username
 for node in $(kavlan -l)
 do
 	scp $HOME/username root@$node:~/
