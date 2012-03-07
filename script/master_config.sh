@@ -15,22 +15,38 @@ echo "#ajout IP puppet" >> /etc/hosts
 
 #ajout des ip dans le fichier de conf du DNS
 i=0
+y=0
 machine1=puppetmaster
 machine2=bind
 machine3=mysql
 machine4=nfs
 machine5=oar_frontend
 machine6=kadeploy
+
 for node in $(cat list_nodes)
 do
 	i++
 	ip_node=`arp $node | cut -d" " -f2 | cut -d"(" -f2 | cut -d")" -f1`
 	if i > 6
-		echo $ip_node > /
+		echo $machine$i	IN	A	$ip_node > /projet/puppet/modules/bind/files/db.ptut.grid5000.fr
 	else 
-		echo $ip_node machine$i
+		echo machine_$y	IN	A	$ip_node  > /projet/puppet/modules/bind/files/db.ptut.grid5000.fr
+		y++
 	done 
 done
+
+for node in $(cat list_nodes)
+do
+	ip_node=`arp $node | cut -d" " -f2 | cut -d"(" -f2 | cut -d")" -f1`
+	ip=cat $ip_node |cut -d "." -f 3
+	if i > 6
+                echo $ip IN       PTR    .ptut.grid5000.fr > /projet/puppet/modules/bind/files/db.revers
+        else
+                echo $ip IN       PTR    .ptut.grid5000.fr > /projet/puppet/modules/bind/files/db.revers
+                y++
+        done
+done
+
 #ajout des hosts clients
 for node in $(cat list_nodes)
 do
