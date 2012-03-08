@@ -1,7 +1,7 @@
 import 'install.pp'
-import 'config.pp'
 import 'service.pp'
+import 'config.pp'
 
 class nfs {
-include nfs::install,nfs::service
+include nfs::install,nfs::config,nfs::service
 }

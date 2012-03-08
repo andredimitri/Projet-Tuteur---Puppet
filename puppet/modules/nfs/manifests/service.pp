@@ -1,5 +1,5 @@
 class nfs::service {
-service { "nfs":
+service { "nfs-kernel-server":
 ensure => running,
 hasstatus => true,
 hasrestart => true,

@@ -8,6 +8,7 @@ config_ssh () {
 
 
 #Définition des chemins vers les fichiers exploités.
+echo "Génération des variables..."
 ##Chemin du fichier liste des nodes réservées.
 list_nodes="$HOME/projet/install/list_nodes"
 install_scripts="$HOME/projet/install"
@@ -24,19 +25,38 @@ puppet_modules="$HOME/projet/puppet/modules"
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #Mise en place de KaVLAN
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-##Activation du dhcp
+##Activation du DHCP g5k
 kavlan -e
 ##Récupération du numéro VLAN
 jobid=`oarstat | grep $USER | cut -d' ' -f1`
 vlan=`kavlan -V -j $jobid `
+site=`uname -n | cut -d"." -f2`
+##Génération du fichier de configuration du DHCP
+export GEM_HOME=/home/$USER/.gem/ruby/1.8/
+gem install ruby-ip --no-ri --no-rdoc --user-install #&>/dev/null
+chmod +x ./projet/install/gen_dhcpd_conf.rb #&>/dev/null
+./projet/install/gen_dhcpd_conf.rb --site $site --vlan-id $vlan #&>/dev/null
+mv dhcpd-kavlan-$vlan-$site.conf $puppet_modules/dhcp/files/dhcpd.conf 
+
+
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#Préparation des nodes (KaVLAN-edit)
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+##Déploiement du système d'exploitation Debian Squeeze-x64-base sur les nodes
+echo "-=-=-"
+echo "Liste des machines réservé:"
+kavlan -l
+echo "-=-=-"
+echo "Déploiement de l'environnement Linux, Debian Squeeze 64bit, sur toutes les machines réservé (Peut prendre plusieurs minutes)."
+kadeploy3 -e squeeze-x64-base -f $OAR_FILE_NODES --vlan $vlan -d -V4 -k $HOME/.ssh/id_dsa.pub &>/dev/null
+echo "-=-=-"
 
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #Vérification et configuration SSH de l'utilisateur
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-##On regarde si le fichier .ssh existe
-echo "---"
-echo "Vérification de la configuration ssh de l'utilisateur "$USER
+echo "Configuration ssh:"
+echo " - Vérification de la configuration ssh (.ssh/config) de l'utilisateur "$USER
 
 trouver=0
 
@@ -51,33 +71,63 @@ then
 		fi
 	done
 else 
-	echo "Erreur. Aucun fichier, .ssh/config, n'a pas été trouvé..."
+	echo "Erreur. Aucun fichier .ssh/config n'a pas été trouvé..."
 	echo "Arrêt de l'installation."
 	exit
 fi
 
 if [ $trouver -eq 1 ]
 then 
-	echo "Ajout des lignes de 'proxy commande'"
+	echo " - Ajout des lignes de 'proxy commande'"
 	config_ssh >> $HOME/.ssh/config
 fi
 
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#Préparation des nodes (KaVLAN-edit)
+#Vérification et configuration SSH de l'utilisateur
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-##Déploiement du système d'exploitation Debian Squeeze-x64-base sur les nodes
-echo "---"
-echo "Liste des machines réservé:"
-kavlan -l
-echo "---"
-echo "Déploiement de l'environnement Linux, Debian Squeeze 64bit, sur toutes les machines réservé (Peut prendre plusieurs minutes)."
-kadeploy3 -e squeeze-x64-base -f $OAR_FILE_NODES --vlan $vlan -d -V4 -k $HOME/.ssh/id_dsa.pub &>/dev/null
-echo "Copie des clés SSH vers toutes les machines."
-cat $HOME/.ssh/id_dsa.pub >> $HOME/.ssh/authorized_keys
+echo " - Vérification des clé ssh authorisées (.ssh/authorized_keys) de l'utilisateur "$USER
+
+trouver=0
+
+if [ -f $HOME/.ssh/id_dsa.pub ]
+then
+	id_dsa=`cat .ssh/id_dsa.pub`
+	if [ -f $HOME/.ssh/authorized_keys ]
+	then 
+		trouver=1
+		for line in $(cat $HOME/.ssh/authorized_keys)
+		do
+			if [ "$line" = "$id_dsa" ]
+			then
+				trouver=2
+			fi
+		done
+	else 
+		echo "Erreur. Aucun fichier .ssh/authorized_keys n'a pas été trouvé..."
+		echo "Arrêt de l'installation."
+		exit
+	fi
+else
+	echo "Erreur. Aucun fichier .ssh/id_dsa.pub n'a pas été trouvé..."
+	echo "Arrêt de l'installation."
+	exit	
+fi
+
+if [ $trouver -eq 1 ]
+then 
+	echo " - Ajout de la clé privé dans le fichier authorized_keys."
+	cat $HOME/.ssh/id_dsa.pub >> $HOME/.ssh/authorized_keys
+fi
+
+
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#Vérification et configuration SSH de l'utilisateur
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+echo " - Copie des clés SSH vers toutes les machines."
 for node in $(kavlan -l)
 do
-	scp $HOME/.ssh/id_dsa* root@$node:~/.ssh/
+	scp $HOME/.ssh/id_dsa* root@$node:~/.ssh/ &> lol.tmp
 	taktuk -l root -s -m $node broadcast exec [ 'cat ~/.ssh/id_dsa.pub >> ~/.ssh/authorized_keys' ] &>/dev/null
 done
 
@@ -86,19 +136,20 @@ done
 #Création des tunnels
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 echo "Création des tunnels SSH."
-echo $USER > username
+echo $USER > $HOME/username
 for node in $(kavlan -l)
 do
-	scp $HOME/username root@$node:~/
-	scp $install_scripts/tunnel.sh root@$node:~/
+	scp $HOME/username root@$node:~/ &> lol.tmp
+	scp $install_scripts/tunnel.sh root@$node:~/ &> lol.tmp
 done
-rm username
+rm $HOME/username
 
 kavlan -l > $list_nodes
 taktuk -l root -s -f $list_nodes broadcast exec [ 'sh tunnel.sh; rm tunnel.sh username' ] &>/dev/null
+echo "-=-=-"
 echo "Mise à jour des dépots"
 taktuk -l root -s -f $list_nodes broadcast exec [ apt-get update ] &>/dev/null
-echo "---"
+
 
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -112,13 +163,16 @@ echo "Installation des paquets sur le serveur: "$puppet_master
 taktuk -l root -s -m $puppet_master broadcast exec [ apt-get -q -y install puppet facter puppetmaster ] &>/dev/null
 ##rapatriement des catalogues/modules/manifests sur le master
 echo "Rapartriement des catalogues/modules/manifests sur "$puppet_master
-scp -r $puppet_modules/ root@$puppet_master:/etc/puppet/
+scp -r $puppet_modules/ root@$puppet_master:/etc/puppet/ &> lol.tmp
 ##attribution des rôles aux clients et ajout des clients dans nodes.pp
 echo "Attribution des rôles effectués:"
-echo "- "`sed -n '2 p' $list_nodes `" : bind9,"
-echo "- "`sed -n '3 p' $list_nodes `" : MySQL,"
-echo "- "`sed -n '4 p' $list_nodes `" : NFS."
-echo "- "`sed -n '5 p' $list_nodes `" : OAR."
+echo "- "`sed -n '2 p' $list_nodes `" : DHCP,"
+echo "- "`sed -n '3 p' $list_nodes `" : bind9,"
+echo "- "`sed -n '4 p' $list_nodes `" : MySQL,"
+echo "- "`sed -n '5 p' $list_nodes `" : NFS,"
+taktuk -l root -s -m `sed -n '5 p' $list_nodes` broadcast exec [ mkdir /var/partage ] &>/dev/null
+echo "- "`sed -n '6 p' $list_nodes `" : OAR,"
+#echo "- "`sed -n '7 p' $list_nodes `" : kadeploy."
 
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -136,21 +190,21 @@ taktuk -l root -s -f $puppet_clients broadcast exec [ apt-get -q -y install pupp
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 ##sur le master:
 echo "Configuration du serveur et des machines clientes."
-scp $list_nodes  root@$puppet_master:~/
-scp $puppet_scripts/master_config.sh  root@$puppet_master:~/
+scp $list_nodes  root@$puppet_master:~/ &> lol.tmp
+scp $puppet_scripts/master_config.sh  root@$puppet_master:~/ &> lol.tmp
 taktuk -l root -m $puppet_master broadcast exec [ 'sh master_config.sh; rm master_config.sh list_nodes' ] &>/dev/null
 ##sur les clients:
 for puppet_client in $(cat $puppet_clients)
 do
 	echo $puppet_master >> $HOME/couple
 	echo $puppet_client >> $HOME/couple
-	scp $HOME/couple  root@$puppet_client:~/
-	scp $puppet_scripts/clients_config.sh  root@$puppet_client:~/
-	taktuk -l root -m $puppet_client broadcast exec [ 'sh clients_config.sh; rm clients_config.sh couple' ] &>/dev/null
+	scp $HOME/couple  root@$puppet_client:~/ &> lol.tmp
+	scp $puppet_scripts/clients_config.sh  root@$puppet_client:~/ &> lol.tmp
+	taktuk -l root -m $puppet_client broadcast exec [ 'sh clients_config.sh; rm clients_config.sh' ] &>/dev/null
 	rm $HOME/couple
 done
 
-echo "---"
+echo "-=-=-"
 
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -166,5 +220,11 @@ taktuk -l root -m $puppet_master broadcast exec [ puppet cert --sign --all ] &>/
 ###récupération des catalogues
 echo "récupération des catalogues"
 taktuk -l root -f $puppet_clients broadcast exec [ puppet agent --test ] &>/dev/null
-echo "---"
+###Désactivation du DHCP g5k
+kavlan -d
+###Rédémarrage du service réseau des clients. Pour le nouveau DHCP et pour le NFS.
+echo "Redémarrage des services"
+taktuk -l root -s -m `sed -n '5 p' $list_nodes` broadcast exec [ /etc/init.d/nfs-kernel-server reload ] &>/dev/null
+taktuk -l root -s -f $list_nodes broadcast exec [ /etc/init.d/networking restart ] &>/dev/null
+echo "-=-=-"
 echo "Fin de déploiement"
