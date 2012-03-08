@@ -46,3 +46,7 @@ s5) Semaine du 26/02 au 02/03 :
  - Ajout du module OAR dans Puppet (installation et configuration).
  - Fixation du problème de Tunnel SSH avec Taktuk.
  - Installation par le script de Puppet et du PuppetMaster sur les noeuds.
+
+s6) Semaine du 05/03 au 09/03:
+ - Optimisation des modules DNS et OAR pour Puppet.
+ - Mise en place du DHCP.
