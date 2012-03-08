@@ -1,5 +1,5 @@
 class nfs::install {
-package { "nfs-kernel-server":
-ensure => installed,
+package { [ "nfs-kernel-server", "nfs-common" ]:
+ensure => present,
 }
 }
