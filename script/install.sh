@@ -1,6 +1,18 @@
 #!/bin/bash
 
 
+## Organisation des fichiers créés lors du script d'installation
+# list_nodes		=> listes toutes les machines du VLAN
+# list_users 		=> listes toutes les machines utilisateurs
+# puppet_masters 	=> liste la machine puppet serveur
+# puppet_clients 	=> listes des machines serveurs (DHCP, DNS, BdD, NFS, OAR, Kadeploy)
+
+# Quentin: OAR
+# Dimitri: Bind9
+# Riwan: Puppet-dashoard (apt-mirror?)
+# Other: Kadeploy
+
+
 config_ssh () {
 	echo "Host *-*-kavlan-"$vlan" *-*-kavlan-"$vlan".*.grid5000.fr"
 	echo "	ProxyCommand ssh -a -x kavlan-"$vlan" nc -q 0 %h %p"
@@ -11,6 +23,7 @@ config_ssh () {
 echo "Génération des variables..."
 ##Chemin du fichier liste des nodes réservées.
 list_nodes="$HOME/projet/install/list_nodes"
+list_users="$HOME/projet/install/list_users"
 install_scripts="$HOME/projet/install"
 ##Chemin des fichiers listes des clients et des masters
 puppet_fichiers="$HOME/projet/puppet/fichiers"
@@ -33,9 +46,9 @@ vlan=`kavlan -V -j $jobid `
 site=`uname -n | cut -d"." -f2`
 ##Génération du fichier de configuration du DHCP
 export GEM_HOME=/home/$USER/.gem/ruby/1.8/
-gem install ruby-ip --no-ri --no-rdoc --user-install #&>/dev/null
-chmod +x ./projet/install/gen_dhcpd_conf.rb #&>/dev/null
-./projet/install/gen_dhcpd_conf.rb --site $site --vlan-id $vlan #&>/dev/null
+gem install ruby-ip --no-ri --no-rdoc --user-install &>/dev/null
+chmod +x ./projet/install/gen_dhcpd_conf.rb &>/dev/null
+./projet/install/gen_dhcpd_conf.rb --site $site --vlan-id $vlan &>/dev/null
 mv dhcpd-kavlan-$vlan-$site.conf $puppet_modules/dhcp/files/dhcpd.conf 
 
 
@@ -127,8 +140,8 @@ fi
 echo " - Copie des clés SSH vers toutes les machines."
 for node in $(kavlan -l)
 do
-	scp $HOME/.ssh/id_dsa* root@$node:~/.ssh/ &> lol.tmp
-	taktuk -l root -s -m $node broadcast exec [ 'cat ~/.ssh/id_dsa.pub >> ~/.ssh/authorized_keys' ] &>/dev/null
+	scp $HOME/.ssh/id_dsa* root@$node:~/.ssh/ #&> lol.tmp
+	taktuk -l root -s -m $node broadcast exec [ 'cat ~/.ssh/id_dsa.pub >> ~/.ssh/authorized_keys' ] #&>/dev/null
 done
 
 
@@ -139,50 +152,56 @@ echo "Création des tunnels SSH."
 echo $USER > $HOME/username
 for node in $(kavlan -l)
 do
-	scp $HOME/username root@$node:~/ &> lol.tmp
-	scp $install_scripts/tunnel.sh root@$node:~/ &> lol.tmp
+	scp $HOME/username root@$node:~/ #&> lol.tmp
+	scp $install_scripts/tunnel.sh root@$node:~/ #&> lol.tmp
 done
 rm $HOME/username
 
 kavlan -l > $list_nodes
-taktuk -l root -s -f $list_nodes broadcast exec [ 'sh tunnel.sh; rm tunnel.sh username' ] &>/dev/null
+taktuk -l root -s -f $list_nodes broadcast exec [ 'sh tunnel.sh; rm tunnel.sh username' ] #&>/dev/null
 echo "-=-=-"
 echo "Mise à jour des dépots"
-taktuk -l root -s -f $list_nodes broadcast exec [ apt-get update ] &>/dev/null
-
+taktuk -l root -s -f $list_nodes broadcast exec [ apt-get update ] #&>/dev/null
 
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #Installation du master puppet
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 ##récupération du node master (premier de la liste)
-sed -n "1 p" $list_nodes > $puppet_masters
+cp $list_nodes $list_users
+sed -n "1 p" $list_users > $puppet_masters
+sed -i "1 d" $list_users
 puppet_master=`cat $puppet_masters `
 ##installation via APT des paquets serveur et agent de puppet. Notre serveur sera aussi son propre client
 echo "Installation des paquets sur le serveur: "$puppet_master
-taktuk -l root -s -m $puppet_master broadcast exec [ apt-get -q -y install puppet facter puppetmaster ] &>/dev/null
+taktuk -l root -s -m $puppet_master broadcast exec [ apt-get -q -y install puppet facter puppetmaster ] #&>/dev/null
 ##rapatriement des catalogues/modules/manifests sur le master
 echo "Rapartriement des catalogues/modules/manifests sur "$puppet_master
-scp -r $puppet_modules/ root@$puppet_master:/etc/puppet/ &> lol.tmp
+scp -r $puppet_modules/ root@$puppet_master:/etc/puppet/ #&> lol.tmp
 ##attribution des rôles aux clients et ajout des clients dans nodes.pp
 echo "Attribution des rôles effectués:"
-echo "- "`sed -n '2 p' $list_nodes `" : DHCP,"
-echo "- "`sed -n '3 p' $list_nodes `" : bind9,"
-echo "- "`sed -n '4 p' $list_nodes `" : MySQL,"
-echo "- "`sed -n '5 p' $list_nodes `" : NFS,"
-taktuk -l root -s -m `sed -n '5 p' $list_nodes` broadcast exec [ mkdir /var/partage ] &>/dev/null
-echo "- "`sed -n '6 p' $list_nodes `" : OAR,"
-#echo "- "`sed -n '7 p' $list_nodes `" : kadeploy."
+echo "- "`sed -n '1 p' $list_users `" : DHCP," #fini riwan
+echo "- "`sed -n '2 p' $list_users `" : bind9,"
+echo "- "`sed -n '3 p' $list_users `" : MySQL," #fini riwan
+echo "- "`sed -n '4 p' $list_users `" : NFS," #fini riwan
+taktuk -l root -s -m `sed -n '4 p' $list_users ` broadcast exec [ mkdir /var/partage ] #&>/dev/null
+echo "- "`sed -n '5 p' $list_users `" : OAR,"
+echo "- "`sed -n '6 p' $list_users `" : kadeploy." 
 
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #installation des clients puppet
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 ##récupération des nodes clientes
-cat $list_nodes | tail -n +2 > $puppet_clients
+for i in `seq 1 6`
+do
+	sed -n '1p' $list_users >> $puppet_clients
+	sed -i '1d' $list_users
+done
+
 ##installation via APT des paquets agent de puppet pour les clients 
 echo "Installation des paquets sur les machines clientes"
-taktuk -l root -s -f $puppet_clients broadcast exec [ apt-get -q -y install puppet facter ] &>/dev/null
+taktuk -l root -s -f $puppet_clients broadcast exec [ apt-get -q -y install puppet facter ] #&>/dev/null
 
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -190,17 +209,17 @@ taktuk -l root -s -f $puppet_clients broadcast exec [ apt-get -q -y install pupp
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 ##sur le master:
 echo "Configuration du serveur et des machines clientes."
-scp $list_nodes  root@$puppet_master:~/ &> lol.tmp
-scp $puppet_scripts/master_config.sh  root@$puppet_master:~/ &> lol.tmp
-taktuk -l root -m $puppet_master broadcast exec [ 'sh master_config.sh; rm master_config.sh list_nodes' ] &>/dev/null
+scp $list_nodes  root@$puppet_master:~/ #&> lol.tmp
+scp $puppet_scripts/master_config.sh  root@$puppet_master:~/ #&> lol.tmp
+taktuk -l root -m $puppet_master broadcast exec [ 'sh master_config.sh; rm master_config.sh list_nodes' ] #&>/dev/null
 ##sur les clients:
 for puppet_client in $(cat $puppet_clients)
 do
 	echo $puppet_master >> $HOME/couple
 	echo $puppet_client >> $HOME/couple
-	scp $HOME/couple  root@$puppet_client:~/ &> lol.tmp
-	scp $puppet_scripts/clients_config.sh  root@$puppet_client:~/ &> lol.tmp
-	taktuk -l root -m $puppet_client broadcast exec [ 'sh clients_config.sh; rm clients_config.sh' ] &>/dev/null
+	scp $HOME/couple  root@$puppet_client:~/ #&> lol.tmp
+	scp $puppet_scripts/clients_config.sh  root@$puppet_client:~/ #&> lol.tmp
+	taktuk -l root -m $puppet_client broadcast exec [ 'sh clients_config.sh; rm clients_config.sh' ] #&>/dev/null
 	rm $HOME/couple
 done
 
@@ -213,18 +232,26 @@ echo "-=-=-"
 ##synchronisations clients <-> master
 ###envoie des demandes de certificat
 echo "Déploiement des demandes de certificat."
-taktuk -l root -f $puppet_clients broadcast exec [ puppet agent --test ] &>/dev/null
+taktuk -l root -f $puppet_clients broadcast exec [ puppet agent --test ] #&>/dev/null
 ###signature des certificats
 echo "signature des certificats."
-taktuk -l root -m $puppet_master broadcast exec [ puppet cert --sign --all ] &>/dev/null
+taktuk -l root -m $puppet_master broadcast exec [ puppet cert --sign --all ] #&>/dev/null
 ###récupération des catalogues
 echo "récupération des catalogues"
-taktuk -l root -f $puppet_clients broadcast exec [ puppet agent --test ] &>/dev/null
+taktuk -l root -f $puppet_clients broadcast exec [ puppet agent --test ] #&>/dev/null
+
+
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#Fini du script, redémarrage des services installé
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 ###Désactivation du DHCP g5k
 kavlan -d
 ###Rédémarrage du service réseau des clients. Pour le nouveau DHCP et pour le NFS.
 echo "Redémarrage des services"
-taktuk -l root -s -m `sed -n '5 p' $list_nodes` broadcast exec [ /etc/init.d/nfs-kernel-server reload ] &>/dev/null
-taktuk -l root -s -f $list_nodes broadcast exec [ /etc/init.d/networking restart ] &>/dev/null
+#taktuk -l root -s -m `sed -n '4 p' $puppet_clients ` broadcast exec [ /etc/init.d/nfs-kernel-server reload ] &>/dev/null
+sed -i 1d $puppet_clients
+#taktuk -l root -s -f $puppet_clients broadcast exec [ /etc/init.d/networking restart ] &>/dev/null
+#taktuk -l root -s -f $list_nodes broadcast exec [ /etc/init.d/networking restart ] &>/dev/null
+rm lol.tmp
 echo "-=-=-"
 echo "Fin de déploiement"
