@@ -1,5 +1,4 @@
-
-ptions {
+options {
         directory "/var/cache/bind";
 
         // If there is a firewall between you and nameservers you want
