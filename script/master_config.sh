@@ -17,11 +17,14 @@ echo "#ajout IP puppet" >> /etc/hosts
 i=0
 y=0
 machine1=puppetmaster
-machine2=bind
-machine3=mysql
-machine4=nfs
-machine5=oar_frontend
-machine6=kadeploy
+machine2=dhcp
+machine3=bind
+machine4=mysql
+machine5=nfs
+machine6=oar_frontend
+machine7=kadeploy
+
+#ajout d'information dans le named.conf.ptut
 ip_complete = `arp $node | cut -d" " -f2 | cut -d"(" -f2 | cut -d")" -f1`
 ip = $ip_complete |cut -d "." -f2
 echo zone "$ip.in-addr.arpa" {  > /projet/puppet/modules/bind/files/named.conf.ptut
@@ -30,11 +33,12 @@ echo        notify no;  > /projet/puppet/modules/bind/files/named.conf.ptut
 echo        file "/etc/bind/db.192";  > /projet/puppet/modules/bind/files/named.conf.ptut
 echo }; > /projet/puppet/modules/bind/files/named.conf.ptut
 
+#ajout des correspondances dans les fichiers de zones
 for node in $(cat list_nodes)
 do
 	i++
 	ip_node=`arp $node | cut -d" " -f2 | cut -d"(" -f2 | cut -d")" -f1`
-	if i > 6
+	if i > 7
 		echo $machine$i	IN	A	$ip_node > /projet/puppet/modules/bind/files/db.ptut.grid5000.fr
 	else 
 		echo machine_$y	IN	A	$ip_node  > /projet/puppet/modules/bind/files/db.ptut.grid5000.fr
