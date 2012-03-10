@@ -22,6 +22,13 @@ machine3=mysql
 machine4=nfs
 machine5=oar_frontend
 machine6=kadeploy
+ip_complete = `arp $node | cut -d" " -f2 | cut -d"(" -f2 | cut -d")" -f1`
+ip = $ip_complete |cut -d "." -f2
+echo zone "$ip.in-addr.arpa" {  > /projet/puppet/modules/bind/files/named.conf.ptut
+echo        type master;  > /projet/puppet/modules/bind/files/named.conf.ptut
+echo        notify no;  > /projet/puppet/modules/bind/files/named.conf.ptut
+echo        file "/etc/bind/db.192";  > /projet/puppet/modules/bind/files/named.conf.ptut
+echo }; > /projet/puppet/modules/bind/files/named.conf.ptut
 
 for node in $(cat list_nodes)
 do
