@@ -46,17 +46,14 @@ vlan=`kavlan -V -j $jobid `
 site=`uname -n | cut -d"." -f2`
 ##Génération du fichier de configuration du DHCP
 export GEM_HOME=/home/$USER/.gem/ruby/1.8/
-<<<<<<< HEAD
 gem install ruby-ip --no-ri --no-rdoc --user-install #&>/dev/null
 chmod +x ./projet/install/gen_dhcpd_conf.rb #&>/dev/null
 ./projet/install/gen_dhcpd_conf.rb --site $site --vlan-id $vlan #&>/dev/null
 mv dhcpd-kavlan-$vlan-$site.conf $puppet_modules/dhcp/files/dhcpd.conf
-=======
 gem install ruby-ip --no-ri --no-rdoc --user-install &>/dev/null
 chmod +x ./projet/install/gen_dhcpd_conf.rb &>/dev/null
 ./projet/install/gen_dhcpd_conf.rb --site $site --vlan-id $vlan &>/dev/null
 mv dhcpd-kavlan-$vlan-$site.conf $puppet_modules/dhcp/files/dhcpd.conf 
->>>>>>> fa75e6242a8db06afe29410a01ef2354bb143fa2
 
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -147,13 +144,10 @@ fi
 echo " - Copie des clés SSH vers toutes les machines."
 for node in $(kavlan -l)
 do
-<<<<<<< HEAD
 scp $HOME/.ssh/id_dsa* root@$node:~/.ssh/ &> lol.tmp
 taktuk -l root -s -m $node broadcast exec [ 'cat ~/.ssh/id_dsa.pub >> ~/.ssh/authorized_keys' ] &>/dev/null
-=======
-	scp $HOME/.ssh/id_dsa* root@$node:~/.ssh/ #&> lol.tmp
-	taktuk -l root -s -m $node broadcast exec [ 'cat ~/.ssh/id_dsa.pub >> ~/.ssh/authorized_keys' ] #&>/dev/null
->>>>>>> fa75e6242a8db06afe29410a01ef2354bb143fa2
+scp $HOME/.ssh/id_dsa* root@$node:~/.ssh/ #&> lol.tmp
+taktuk -l root -s -m $node broadcast exec [ 'cat ~/.ssh/id_dsa.pub >> ~/.ssh/authorized_keys' ] #&>/dev/null
 done
 
 
@@ -164,13 +158,10 @@ echo "Création des tunnels SSH."
 echo $USER > $HOME/username
 for node in $(kavlan -l)
 do
-<<<<<<< HEAD
 scp $HOME/username root@$node:~/ &> lol.tmp
 scp $install_scripts/tunnel.sh root@$node:~/ &> lol.tmp
-=======
-	scp $HOME/username root@$node:~/ #&> lol.tmp
-	scp $install_scripts/tunnel.sh root@$node:~/ #&> lol.tmp
->>>>>>> fa75e6242a8db06afe29410a01ef2354bb143fa2
+scp $HOME/username root@$node:~/ #&> lol.tmp
+scp $install_scripts/tunnel.sh root@$node:~/ #&> lol.tmp
 done
 rm $HOME/username
 
@@ -210,10 +201,8 @@ echo "- "`sed -n '6 p' $list_users `" : kadeploy."
 #installation des clients puppet
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 ##récupération des nodes clientes
-<<<<<<< HEAD
 cat $list_nodes | tail -n +2 > $puppet_clients
 ##installation via APT des paquets agent de puppet pour les clients
-=======
 for i in `seq 1 6`
 do
 	sed -n '1p' $list_users >> $puppet_clients
@@ -221,7 +210,6 @@ do
 done
 
 ##installation via APT des paquets agent de puppet pour les clients 
->>>>>>> fa75e6242a8db06afe29410a01ef2354bb143fa2
 echo "Installation des paquets sur les machines clientes"
 taktuk -l root -s -f $puppet_clients broadcast exec [ apt-get -q -y install puppet facter ] #&>/dev/null
 
@@ -231,7 +219,6 @@ taktuk -l root -s -f $puppet_clients broadcast exec [ apt-get -q -y install pupp
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 ##sur le master:
 echo "Configuration du serveur et des machines clientes."
-<<<<<<< HEAD
 scp $list_nodes root@$puppet_master:~/ &> lol.tmp
 scp $puppet_scripts/master_config.sh root@$puppet_master:~/ &> lol.tmp
 taktuk -l root -m $puppet_master broadcast exec [ 'sh master_config.sh; rm master_config.sh list_nodes' ] &>/dev/null
@@ -244,7 +231,6 @@ scp $HOME/couple root@$puppet_client:~/ &> lol.tmp
 scp $puppet_scripts/clients_config.sh root@$puppet_client:~/ &> lol.tmp
 taktuk -l root -m $puppet_client broadcast exec [ 'sh clients_config.sh; rm clients_config.sh' ] &>/dev/null
 rm $HOME/couple
-=======
 scp $list_nodes  root@$puppet_master:~/ #&> lol.tmp
 scp $puppet_scripts/master_config.sh  root@$puppet_master:~/ #&> lol.tmp
 taktuk -l root -m $puppet_master broadcast exec [ 'sh master_config.sh; rm master_config.sh list_nodes' ] #&>/dev/null
@@ -257,7 +243,6 @@ do
 	scp $puppet_scripts/clients_config.sh  root@$puppet_client:~/ #&> lol.tmp
 	taktuk -l root -m $puppet_client broadcast exec [ 'sh clients_config.sh; rm clients_config.sh' ] #&>/dev/null
 	rm $HOME/couple
->>>>>>> fa75e6242a8db06afe29410a01ef2354bb143fa2
 done
 
 echo "-=-=-"
