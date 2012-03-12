@@ -5,8 +5,8 @@ class bind::config {
                 group=>'root',
                 mode=> 0600
                 source => "puppet:///modules/bind/files/db.ptut.grid5000.fr",
-                require => Class["ssh::install"],
-                notify => Class("ssh::service"],
+                require => Class["bind::install"],
+                notify => Class("bind::service"],
         }
         file { "/etc/bind/db.revers" :
                 ensure => present,
@@ -14,17 +14,17 @@ class bind::config {
                 group=>'root',
                 mode=> 0600
                 source => "puppet:///modules/bind/files/db.revers",
-                require => Class["ssh::install"],
-                notify => Class("ssh::service"],
+                require => Class["bind::install"],
+                notify => Class("bind::service"],
         }
-        file { "/etc/bind/named.conf.local" :
+        file { "/etc/bind/named.conf.ptut" :
                 ensure => present,
                 owner=>'root',
                 group=>'root',
                 mode=> 0600
                 source => "puppet:///modules/bind/files/named.conf.local",
-                require => Class["ssh::install"],
-                notify => Class("ssh::service"],
+                require => Class["bind::install"],
+                notify => Class("bind::service"],
         }
         file { "/etc/bind/named.conf.options" :
                 ensure => present,
@@ -32,9 +32,16 @@ class bind::config {
                 group=>'root',
                 mode=> 0600
                 source => "puppet:///modules/bind/files/named.conf.options",
-                require => Class["ssh::install"],
-                notify => Class("ssh::service"],
+                require => Class["bind::install"],
+                notify => Class["bind::service"],
         }
-
-}
+	file {"/etc/bind/named.conf" : 
+		ensure => present,
+		owne r=>'root',
+		group =>'root',
+		mode =>0600
+		source =>"puppet:///modules/bind/files/named.conf";
+		require =>Class["bind::install"],
+		notify =>Class["bind::service"],
+	}
 
