@@ -24,15 +24,6 @@ machine5=nfs
 machine6=oar_frontend
 machine7=kadeploy
 
-#ajout d'information dans le named.conf.ptut
-ip_complete = `arp $node | cut -d" " -f2 | cut -d"(" -f2 | cut -d")" -f1`
-ip = $ip_complete |cut -d "." -f2
-echo zone "$ip.in-addr.arpa" {  > /projet/puppet/modules/bind/files/named.conf.ptut
-echo        type master;  > /projet/puppet/modules/bind/files/named.conf.ptut
-echo        notify no;  > /projet/puppet/modules/bind/files/named.conf.ptut
-echo        file "/etc/bind/db.192";  > /projet/puppet/modules/bind/files/named.conf.ptut
-echo }; > /projet/puppet/modules/bind/files/named.conf.ptut
-
 #ajout des correspondances dans les fichiers de zones
 for node in $(cat list_nodes)
 do
@@ -49,7 +40,7 @@ done
 for node in $(cat list_nodes)
 do
 	ip_node=`arp $node | cut -d" " -f2 | cut -d"(" -f2 | cut -d")" -f1`
-	ip=cat $ip_node |cut -d "." -f 3
+	ip=cat $ip_node |cut -d "." -f2
 	if i > 6
                 echo $ip IN       PTR    .ptut.grid5000.fr > /projet/puppet/modules/bind/files/db.revers
         else

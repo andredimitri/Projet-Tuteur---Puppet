@@ -2,4 +2,7 @@ zone "ptut.grid5000.fr" {
 	type master;
 	file"/etc/bind/db.ptut.grid5000.fr";
 };
-
+zone "192.168.in-addr.arpa"
+	type master;
+	file"/etc/bind/db.revers";
+};
