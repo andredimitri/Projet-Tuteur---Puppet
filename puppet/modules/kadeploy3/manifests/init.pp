@@ -64,41 +64,6 @@ class kadeploy3::server inherits kadeploy3::base {
       require => File["/etc/apt/source.list.d/kadeploy.list"],
       ensure => installed;
   }
-  # ------------ >8 ------------ #
-  package {
-    "mysql-server":
-      ensure => installed;
-  }
-  service {
-    "mysql":
-      ensure  => running,
-      enable  => true,
-      require => Package["mysql-server"];
-  }
-
-  exec {
-    "MySQL Kadeploy":
-      command       => "/usr/bin/mysql --execute=\"CREATE DATABASE deploy3\";",
-      user          => root,
-      unless        => "/usr/bin/mysql --execute=\"SHOW DATABASES;\" | grep '^deploy3$'";
-  }
-  file {
-    "/etc/mysql/my.cnf":
-      source  => "puppet:///modules/mysql-conf",
-      ensure  => file,
-      owner   => root,
-      group   => root,
-      mode    => 644,
-      notify  => Service["mysql"],
-      require => Package["mysql-server"];
-    "/root/init_deploy3-db":
-      source  => "puppet:///modules/init_deploy3-db",
-      ensure  => file,
-      owner   => root,
-      group   => root,
-      mode    => 644;
-  }
-  # ------------ >8 ------------ #
 
   file {
     "/var/lib/tftpboot":
