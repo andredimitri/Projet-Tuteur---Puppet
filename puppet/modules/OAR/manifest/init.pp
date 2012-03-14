@@ -6,7 +6,7 @@
 #
 
 # Class:: oar::base
-#
+#Packages communs aux deux types de serveurs
 #
 class oar::base{
 	user { "oar":
@@ -25,46 +25,46 @@ class oar::base{
 		ensure => present,
 		owner => oar,
 		groupe => oar,
-		source => "puppet:///Modules/OAR/config",
+		source => "puppet:///Modules/OAR/config";
 	
 	"/var/lib/oar/.ssh/authorized_keys":
 		ensure => present,
 		owner => oar,
 		group => oar,
-		source => "puppet:///Modules/OAR/authorized_keys",
+		source => "puppet:///Modules/OAR/authorized_keys";
 	
 	"/var/lib/oar/.ssh/id_rsa":
 		ensure => present,
 		owner => oar,
 		group => oar,
-		source => "puppet:///Modules/OAR/id_rsa",
+		source => "puppet:///Modules/OAR/id_rsa";
 	
 	"/var/lib/oar/.ssh/id_rsa.pub":
 		ensure => present,
 		owner => oar,
 		group => oar,
-		source => "puppet:///Modules/OAR/id_rsa.pub",
+		source => "puppet:///Modules/OAR/id_rsa.pub";
 	
 	"/etc/apt/sources.list.d/oar.list":
 		ensure => present,
-		source =>"puppet:///modules/oar_frontend/oar.list",
+		source =>"puppet:///modules/oar_frontend/oar.list";
 	}
 	
 	package { 
+	"oar-keyring":
+		ensure => installed,
+		require => File["/etc/apt/sources.list.d/oar.list"];
+
 	"oar-common":
 		ensure => installed,
 		require => File["/etc/apt/sources.list.d/oar.list"],
-		require => Package["oar-keyring"],
-	
-	"oar-keyring":
-		ensure => installed,
-		require => File["/etc/apt/sources.list.d/oar.list"],
-	}
+		require => Package["oar-keyring"];
+		}
 }
 	
 # Class:: oar::frontend
 #
-#
+# Classe pour l'installation de la machine de frontend
 	
 class oar::frontend inherits oar::base{
 	
@@ -73,19 +73,19 @@ class oar::frontend inherits oar::base{
 	 "oar-doc":
 	 	ensure => installed,
 	 	require => File["/etc/apt/sources.list.d/oar.list"],
-	 	require => Package["oar-keyring"],
+	 	require => Package["oar-keyring"];
 	 
 	 "oar-user":
 	 	ensure => installed,
 	 	require => File["/etc/apt/sources.list.d/oar.list"],
-	 	require => Package["oar-keyring"],
+	 	require => Package["oar-keyring"];
 	 "oar-node":
 	 	ensure => installed,
 	 	require => File["/etc/apt/sources.list.d/oar.list"],
-	 	require => Package["oar-keyring"],
+	 	require => Package["oar-keyring"];
 	 
 	 "taktuk":
-	 	ensure => installed,
+	 	ensure => installed;
 	 }
 	 
 	 file { 
@@ -97,14 +97,14 @@ class oar::frontend inherits oar::base{
 	 "/etc/oar/epilogue":
 		ensure => present,
 		owner => 'root',
-		group => 'root',
+		group => 'root';
 	}
 }
 
 
 # Class:: oar::server
 #
-#
+#Classe d'installation du serveur OAR
 	
 class oar::server inherits oar::base{
 
@@ -112,31 +112,32 @@ class oar::server inherits oar::base{
 	"oar-admin":
 	 	ensure => installed,
 	 	require => Class[oar::base],
+	 	require => Package["mysql-server"];
 
 	"oar-server":
 	 	ensure => installed,
 	 	require => Class[oar::base],
+	 	require => Package["mysql-server"];
 	
 	"oar-web-status": 
-	 	ensure => installed,
-	 	require => Class[oar::base],
+	 	ensure => install;
 	
 	"apache2":
-		ensure => installed,	
+		ensure => installed;	
 
 	mysql-server":
-		ensure => installed,
+		ensure => installed;
 	}
 
 	file { 
 	"/etc/oar/monika.cgi":
 		ensure => present,
-		source => "puppet:///modules/OAR/monika.cgi",
+		source => "puppet:///modules/OAR/monika.cgi";
 	"/etc/oar/drawgantt.cgi":
 		ensure => present,
-		source => "puppet:///modules/OAR/drawgantt.cgi",
+		source => "puppet:///modules/OAR/drawgantt.cgi";
 	"/etc/oar/oar.conf":
 		ensure => present,
-		source =>"puppet:///modules/OAR/oar.conf",	
+		source =>"puppet:///modules/OAR/oar.conf";
 	}
 }
