@@ -1,9 +1,10 @@
-class oar_frontend::config {
-	file { "/etc/oar/{prologue,epilogue}":
+class oar_server::config {
+	file { "/etc/oar/{monika,drawgantt}.cgi":
 		ensure => present,
-		require => Class["oar_frontend::install"],
-		notify => Class["oar_frontend::service"],
+		require => Class["oar_server::install"],
+		notify => Class["oar_server::service"],
 	}
-	file { "/home/oar/.ssh/{config,authorized_keys,id_rsa}":
+	file { "(oar) ~/.ssh/{config,authorized_keys,id_rsa}":
 		ensure => present,
+		pattern => "Almigthy"
 }
