@@ -1,0 +1,2 @@
+GRANT select, insert, update, delete, create, drop, alter, create temporary tables, lock tables ON deploy3.* TO 'kadeploy'@'frontend.ptut.grid5000.fr' IDENTIFIED BY 'toto54';
+GRANT select, insert, update, delete, create, drop, alter, create temporary tables, lock tables ON deploy3.* TO 'kadeploy'@'kadeploy-server.ptut.grid5000.fr' IDENTIFIED BY 'toto54';

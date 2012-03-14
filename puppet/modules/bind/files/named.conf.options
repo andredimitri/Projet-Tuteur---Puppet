@@ -10,9 +10,9 @@ options {
         // Uncomment the following block, and insert the addresses replacing
         // the all-0's placeholder.
 
-        // forwarders {
-        //      131.254.203.235
-        // };
+forwarders {
+	131.254.203.235
+};
 
         auth-nxdomain no;    # conform to RFC1035
         listen-on-v6 { any; };

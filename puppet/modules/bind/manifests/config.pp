@@ -4,7 +4,7 @@ class bind::config {
                 owner=>'root',
                 group=>'root',
                 mode=> 0600
-                source => "puppet:///modules/bind/files/db.ptut.grid5000.fr",
+                source => "puppet:///bind/db.ptut.grid5000.fr",
                 require => Class["bind::install"],
                 notify => Class("bind::service"],
         }
@@ -13,7 +13,7 @@ class bind::config {
                 owner=>'root',
                 group=>'root',
                 mode=> 0600
-                source => "puppet:///modules/bind/files/db.revers",
+                source => "puppet:///bind/db.revers",
                 require => Class["bind::install"],
                 notify => Class("bind::service"],
         }
@@ -22,7 +22,7 @@ class bind::config {
                 owner=>'root',
                 group=>'root',
                 mode=> 0600
-                source => "puppet:///modules/bind/files/named.conf.local",
+                source => "puppet:///bind/named.conf.ptut",
                 require => Class["bind::install"],
                 notify => Class("bind::service"],
         }
@@ -31,7 +31,7 @@ class bind::config {
                 owner=>'root',
                 group=>'root',
                 mode=> 0600
-                source => "puppet:///modules/bind/files/named.conf.options",
+                source => "puppet:///bind/named.conf.options",
                 require => Class["bind::install"],
                 notify => Class["bind::service"],
         }
@@ -40,8 +40,8 @@ class bind::config {
 		owne r=>'root',
 		group =>'root',
 		mode =>0600
-		source =>"puppet:///modules/bind/files/named.conf";
+		source =>"puppet:///bind/named.conf";
 		require =>Class["bind::install"],
 		notify =>Class["bind::service"],
 	}
-
+}

@@ -2,12 +2,12 @@
 ;BIND data file for local loopback interface
 ;
 $TTL    604800
-@       IN      SOA     ns.ptut.grid500.fr. root.localhost. (
+@       IN      SOA     dns.ptut.grid5000.fr. root.ptut.grid5000.fr (
                               3         ; Serial
                          604800         ; Refresh
                           86400         ; Retry
                         2419200         ; Expire
                          604800 )       ; Negative Cache TTL
 ;
-@       IN      NS      ns.ptut.grid5000.fr
+@       IN      NS      dns.ptut.grid5000.fr.
 

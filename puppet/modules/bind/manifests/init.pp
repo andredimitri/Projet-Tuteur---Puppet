@@ -1,7 +1,7 @@
 import 'install.pp'
-import 'service.pp'
 import 'config.pp'
+import 'service.pp'
 class bind {
-include bind::install,bind::service,bind::config
+include bind::install,bind::config,bind::service
 }
 
