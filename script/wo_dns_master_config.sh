@@ -73,7 +73,7 @@ done
 
 USER=`cat $HOME/username`
 utilisateur=`echo "$USER" | tr "a-z" "A-Z"`
-vlan=`tail -1 $HOME/projet/install/list_nodes | cut -d '-' -f4`
+vlan=`tail -1 list_users | cut -d '-' -f4`
 
 part1=KEY_$utilisateur
 part2=$USER@kavlan-$vlan
