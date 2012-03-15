@@ -64,9 +64,21 @@ do
 	ip_machine=`arp $machine | cut -d" " -f2 | cut -d"(" -f2 | cut -d")" -f1`
 	echo "machine$i	IN		A		$ip_machine" >> /etc/puppet/modules/bind/files/db.ptut-grid5000.lan
 	ip_oct_4=`echo $ip_machine |cut -d"." -f4 `
-	echo "$ip_oct_4		IN		PTR		machine$i.ptut-grid5000.lan." >> /etc/puppet/modules/bind/files/db.revers 	
-	i=$(($i+1))
+	echo "$ip_oct_4		IN		PTR		machine$i.ptut-grid5000.lan." >> /etc/puppet/modules/bind/files/db.revers
+	echo "marocco-$i.ptut.grid5000.fr $ip_machines marocco" >> /etc/puppet/modules/kadeploy3/files/confsnodes
+        i=$(($i+1))
 done
 
+#Ajout d'information dans le fichier specific_conf_marocco dans kadeploy3
 
-exit 0
+USER=`cat $HOME/username`
+utilisateur=`echo "$USER" | tr "a-z" "A-Z"`
+vlan=`tail -1 $HOME/projet/install/list_nodes | cut -d '-' -f4`
+
+part1=KEY_$utilisateur
+part2=$USER@kavlan-$vlan
+
+sed -i s/KEY_RBLONDE/$part1/g /etc/puppet/modules/kadeploy3/files/confs/specific_conf_marocco
+sed -i s/rblonde@kavlan-1/$part2/g /etc/puppet/modules/kadeploy3/files/confs/specific_conf_marocco
+
+exit 0 	
