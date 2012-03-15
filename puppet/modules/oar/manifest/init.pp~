@@ -12,13 +12,6 @@
 
 
 ## TODO : vérifier /etc/ssh/sshd_config
-#
-#installer les paquets
-#définir les node.pp
-#définir les site.pp
-#placer le module dans modules
-#ajouter ce qu'il faut dans puppet.conf et /etc/hosts
-
 class oar::base{
 	user { "oar":
 		ensure  => present,
