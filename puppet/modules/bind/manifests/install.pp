@@ -1,5 +1,5 @@
 class bind::install {
-package { [ "bind9", "bind9utils" ]:
-ensure => present,
-}
+  package { "bind9":
+    ensure => present,
+  }
 }

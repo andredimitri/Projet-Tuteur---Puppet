@@ -3,36 +3,29 @@
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #Configuration du serveur puppet maitre
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-echo "puppet.ptut-grid5000.lan" > /ect/hostname
-/etc/init.d/hostname.sh start
-
 puppetmaster=`sed -n 1p puppet_clients`
-echo "server=puppet.ptut-grid5000.lan" >> /etc/puppet/puppet.conf
+echo "server="$puppetmaster >> /etc/puppet/puppet.conf
 echo "[master]" >> /etc/puppet/puppet.conf
-echo "certname=puppet.ptut-grid5000.lan" >> /etc/puppet/puppet.conf
+echo "certname="$puppetmaster >> /etc/puppet/puppet.conf
 
 echo " " >> /etc/hosts
 echo "#ajout IP puppet" >> /etc/hosts
 
 #ajout des hosts clients
-y=1
-for role in "puppet" "dhcp" "dns" "mysql" "nfs" "oar" "kadeploy"
+for node in $(cat puppet_clients)
 do
-	node=`sed -n $y"p" puppet_clients`
 	ip_node=`arp $node | cut -d" " -f2 | cut -d"(" -f2 | cut -d")" -f1`
-	echo "$ip_node $role.ptut-grid5000.lan" >> /etc/hosts
-	y=$(($y+1))
+	echo $ip_node $node >> /etc/hosts
 done
 
 #attribution des rôles aux clients et ajout des clients dans nodes.pp
 
-echo "node 'puppet.ptut-grid5000.lan' { include apache, dashboard }" >> /etc/puppet/manifests/nodes.pp
+echo "node '$puppetmaster' { include apache, dashboard }" >> /etc/puppet/manifests/nodes.pp
 j=2
 for role in "dhcp" "bind" "mysql" "nfs" "oar" "kadeploy"
 do
 	node=`sed -n $j"p" puppet_clients`
-	echo "node '$role.ptut-grid5000.lan' { include $role }" >> /etc/puppet/manifests/nodes.pp
+	echo "node '$node' { include $role }" >> /etc/puppet/manifests/nodes.pp
 	j=$(($j+1))
 done
 echo "import 'nodes.pp'" >> /etc/puppet/manifests/site.pp
@@ -56,13 +49,12 @@ echo '};' >> /etc/puppet/modules/bind/files/named.conf.local
 #ajout des correspondances dans les fichiers de zones
 ##fichier db.ptut-grid5000.lan et db.revers
 i=1
-for role in "puppet" "dhcp" "bind" "mysql" "nfs" "oar" "kadeploy"
+for node in $(cat puppet_clients)
 do
-	node=`sed -n $i"p" puppet_clients`
 	ip_node=`arp $node | cut -d" " -f2 | cut -d"(" -f2 | cut -d")" -f1`
-	echo "$role		IN		A		$ip_node" >> /etc/puppet/modules/bind/files/db.ptut-grid5000.lan
+	echo "$node		IN		A		$ip_node" >> /etc/puppet/modules/bind/files/db.ptut-grid5000.lan
 	ip_oct_4=`echo $ip_node |cut -d"." -f4 `
-	echo "$ip_oct_4		IN		PTR		$role.ptut-grid5000.lan." >> /etc/puppet/modules/bind/files/db.revers 
+	echo "$ip_oct_4		IN		PTR		$node." >> /etc/puppet/modules/bind/files/db.revers 
 	i=$(($i+1))
 done
 

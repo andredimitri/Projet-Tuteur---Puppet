@@ -1,4 +1,4 @@
-#!/bin/bah
+#!/bin/bash
 
 user=`cat username`
 gateway=`/sbin/ip route | awk '/default/{ print $3 }'`

@@ -3,5 +3,5 @@ import 'config.pp'
 import 'service.pp'
 
 class dhcp {
-include dhcp::install,dhcp::config,dhcp::service
+  include dhcp::install,dhcp::config,dhcp::service
 }

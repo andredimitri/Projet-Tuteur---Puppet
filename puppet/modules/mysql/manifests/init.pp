@@ -3,5 +3,5 @@ import 'config.pp'
 import 'service.pp'
 
 class mysql {
-include mysql::install,mysql::config,mysql::service
+  include mysql::install,mysql::config,mysql::service
 }

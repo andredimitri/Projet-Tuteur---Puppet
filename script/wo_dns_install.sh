@@ -5,7 +5,7 @@
 # list_nodes		=> listes toutes les machines du VLAN
 # list_users 		=> listes toutes les machines utilisateurs
 # puppet_masters 	=> liste la machine puppet serveur
-# puppet_clients 	=> listes des machines serveurs (DHCP, DNS, BdD, NFS, OAR, Kadeploy)
+# puppet_clients 	=> listes des machines serveurs (DHCP, BdD, NFS, OAR, Kadeploy)
 
 
 config_ssh () {
@@ -71,7 +71,7 @@ done
 
 echo "-=-=-"
 echo "Déploiement de l'environnement Linux, Debian Squeeze 64bit, sur toutes les machines réservé (Peut prendre plusieurs minutes)."
-kadeploy3 -e squeeze-x64-base -f $OAR_FILE_NODES --vlan $vlan -d -V4 -k $HOME/.ssh/id_dsa.pub &>/dev/null
+kadeploy3 -e squeeze-x64-base -f $OAR_FILE_NODES --vlan $vlan -d -V4 -k $HOME/.ssh/id_dsa.pub #&>/dev/null
 echo "-=-=-"
 
 
@@ -213,18 +213,14 @@ scp $puppet_scripts/master_config.sh  root@$puppet_master:~/ #&> lol.tmp
 taktuk -l root -m $puppet_master broadcast exec [ 'sh master_config.sh' ] #&>/dev/null
 ##sur les clients:
 sed -i 1d $puppet_clients
-n=2
 for puppet_client in $(cat $puppet_clients)
 do
 	echo $puppet_master >> $HOME/couple
 	echo $puppet_client >> $HOME/couple
-	echo $n >> $HOME/couple
 	scp $HOME/couple  root@$puppet_client:~/ #&> lol.tmp
-	scp $puppet_fichiers/roles root@$puppet_client:~/ #&> lol.tmp
 	scp $puppet_scripts/clients_config.sh  root@$puppet_client:~/ #&> lol.tmp
 	taktuk -l root -m $puppet_client broadcast exec [ 'sh clients_config.sh' ] #&>/dev/null
 	rm $HOME/couple
-	n=$(($n+1))
 done
 
 echo "-=-=-"
@@ -236,13 +232,13 @@ echo "-=-=-"
 ##synchronisations clients <-> master
 ###envoie des demandes de certificat
 echo "Déploiement des demandes de certificat."
-taktuk -l root -f $puppet_clients broadcast exec [ puppet agent --test ] &>/dev/null
+taktuk -l root -f $puppet_clients broadcast exec [ puppet agent --test ] #&>/dev/null
 ###signature des certificats
 echo "signature des certificats."
-taktuk -l root -m $puppet_master broadcast exec [ puppet cert --sign --all ] &>/dev/null
+taktuk -l root -m $puppet_master broadcast exec [ puppet cert --sign --all ] #&>/dev/null
 ###récupération des catalogues
 echo "récupération des catalogues"
-taktuk -l root -f $puppet_clients broadcast exec [ puppet agent --test ] &>/dev/null
+taktuk -l root -f $puppet_clients broadcast exec [ puppet agent --test ] #&>/dev/null
 
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -252,10 +248,10 @@ taktuk -l root -f $puppet_clients broadcast exec [ puppet agent --test ] &>/dev/
 kavlan -d
 ###Rédémarrage du service réseau des clients. Pour le nouveau DHCP et pour le NFS.
 echo "Redémarrage des services"
-#taktuk -l root -s -m `sed -n '4 p' $puppet_clients ` broadcast exec [ /etc/init.d/nfs-kernel-server reload ] &>/dev/null
+taktuk -l root -s -m `sed -n '4 p' $puppet_clients ` broadcast exec [ /etc/init.d/nfs-kernel-server reload ] #&>/dev/null
 sed -i 1d $puppet_clients
-taktuk -l root -s -f $puppet_clients broadcast exec [ dhclient ] &>/dev/null
-taktuk -l root -s -f $list_users broadcast exec [ dhclient ] &>/dev/null
+taktuk -l root -s -f $puppet_clients broadcast exec [ dhclient ] #&>/dev/null
+taktuk -l root -s -f $list_users broadcast exec [ dhclient ] #&>/dev/null
 rm lol.tmp
 echo "-=-=-"
 echo "Fin de déploiement"

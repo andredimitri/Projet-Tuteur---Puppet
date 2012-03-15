@@ -1,9 +1,9 @@
-class dhcp::service {
-  service { "isc-dhcp-server":
+class apache::service {
+  service { "apache2":
     ensure => running,
     hasstatus => true,
     hasrestart => true,
     enable => true,
-    require => Class["dhcp::install"],
+    require => Class["apache::install"],
   }
 }
