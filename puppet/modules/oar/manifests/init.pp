@@ -14,12 +14,13 @@
 #ajouter ce qu'il faut dans puppet.conf et /etc/hosts
 
 
-#Class:: oar
+Exec { path => '/usr/bin:/bin:/usr/sbin:/sbin' }
+#Class oar
 #Superclasse pour appeller les deux autres modules
 #
 class oar{
-	require => Class["oar::frontend"],
-	require => Class["oar::server"];
+  include oar::frontend
+  include oar::server
 }
 
 # Class:: oar::base
@@ -27,61 +28,66 @@ class oar{
 #
 
 class oar::base{
+	group { "oar":
+		ensure => present;
+	}
+	
 	user { "oar":
 		ensure  => present,
-		uid     => "1042",
-		gid     => "1042",
-		groups  => ["kadeploy","oar"],
+		# TODO
+		#groups  => ["kadeploy","oar"],
+		groups  => "oar",
 		shell   => "/bin/sh",
 		home    => "/var/lib/oar",
 		managehome => true;
 	}
-	realize["oar"];
 	
 	file { 
 	"/var/lib/oar/.ssh/config":
 		ensure => file,
 		owner => oar,
-		groupe => oar,
+		group => oar,
+		mode => 0644,
 		source => "puppet:///oar/config";
-	
 	"/etc/ssh/sshd_config":
 		ensure => file,
+		mode => 0646,
 		source => "puppet:///oar/sshd_config";
-	
 	"/var/lib/oar/.ssh/authorized_keys":
 		ensure => file,
 		owner => oar,
 		group => oar,
+		mode => 0644,
 		source => "puppet:///oar/authorized_keys";
-	
 	"/var/lib/oar/.ssh/id_rsa":
 		ensure => file,
 		owner => oar,
 		group => oar,
+		mode => 0400,
 		source => "puppet:///oar/id_rsa";
-	
 	"/var/lib/oar/.ssh/id_rsa.pub":
 		ensure => file,
 		owner => oar,
 		group => oar,
+		mode => 0400,
 		source => "puppet:///oar/id_rsa.pub";
-	
 	"/etc/apt/sources.list.d/oar.list":
 		ensure => file,
-		source =>"puppet:///oar/oar.list";
+		mode => 0644,
+		source =>"puppet:///oar/oar.list",
+		#notify => Exec["updating"];
 	}
 	
 	package { 
 	"oar-keyring":
 		ensure => installed,
-		command => "apt-get install -y --force-yes oar-keyring"
 		require => File["/etc/apt/sources.list.d/oar.list"];
-
 	"oar-common":
 		ensure => installed,
-		require => File["/etc/apt/sources.list.d/oar.list"],
-		require => Package["oar-keyring"];
+		require => [File["/etc/apt/sources.list.d/oar.list"],Package["oar-keyring"]];
+		}
+		exec { "apt-get update && apt-get install oar-common oar-keyring --allow-unauthenticated": 
+		path => '/usr/bin:/bin:/usr/sbin:/sbin';
 		}
 }
 	
@@ -90,22 +96,17 @@ class oar::base{
 # Classe pour l'installation de la machine de frontend
 	
 class oar::frontend inherits oar::base{
-	
-	 require => User["oar"],
 	 package { 
 	 "oar-doc":
 	 	ensure => installed,
-	 	require => File["/etc/apt/sources.list.d/oar.list"],
-	 	require => Package["oar-keyring"];
+	 	require => [File["/etc/apt/sources.list.d/oar.list"],Package["oar-keyring"]];
 	 
 	 "oar-user":
 	 	ensure => installed,
-	 	require => File["/etc/apt/sources.list.d/oar.list"],
-	 	require => Package["oar-keyring"];
+	 	require => [File["/etc/apt/sources.list.d/oar.list"],Package["oar-keyring"]];
 	 "oar-node":
 	 	ensure => installed,
-	 	require => File["/etc/apt/sources.list.d/oar.list"],
-	 	require => Package["oar-keyring"];
+	 	require => [File["/etc/apt/sources.list.d/oar.list"],Package["oar-keyring"]];
 	 
 	 "taktuk":
 	 	ensure => installed;
@@ -114,11 +115,12 @@ class oar::frontend inherits oar::base{
 	 file { 
 	"/etc/oar/prologue":
 		ensure => file,
-		
+		mode => 0644,
 		owner => 'root',
-		group => 'root',
+		group => 'root';
 	 "/etc/oar/epilogue":
 		ensure => file,
+		mode => 0644,
 		owner => 'root',
 		group => 'root';
 	}
@@ -132,35 +134,13 @@ class oar::frontend inherits oar::base{
 class oar::server inherits oar::base{
 
 	package { 
-	"oar-admin":
-	 	ensure => installed,
-	 	require => Class[oar::base],
-	 	require => Package["mysql-server"];
-
-	"oar-server":
-	 	ensure => installed,
-	 	require => Class[oar::base],
-	 	require => Package["mysql-server"];
-	
-	"oar-web-status": 
+	["oar-admin","oar-server","oar-web-status","apache2"]:
 	 	ensure => installed;
-	
-	"apache2":
-		ensure => installed;	
-
-	"mysql-server":
-		ensure => installed;
 	}
-
 	file { 
-	"/etc/oar/monika.cgi":
-		ensure => file,
-		source => "puppet:///oar/monika.cgi";
-	"/etc/oar/drawgantt.cgi":
-		ensure => file,
-		source => "puppet:///oar/drawgantt.cgi";
 	"/etc/oar/oar.conf":
 		ensure => file,
+		mode => 0644,
 		source =>"puppet:///oar/oar.conf";
 	}
 }
