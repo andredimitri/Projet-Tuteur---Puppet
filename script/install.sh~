@@ -52,7 +52,7 @@ mv dhcpd-kavlan-$vlan-$site.conf $puppet_modules/dhcp/files/dhcpd.conf
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 ##Déploiement du système d'exploitation Debian Squeeze-x64-base sur les nodes
 echo "-=-=-"
-echo "Liste des machines réservées:"
+echo "Liste des machines réservé:"
 kavlan -l
 
 ##récupération de toutes les nodes.

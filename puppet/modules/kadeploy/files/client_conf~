@@ -1,3 +1,0 @@
-# MANAGED BY PUPPET
-default = ptut
-ptut = kadeploy-server.ptut.grid5000.fr:25300
