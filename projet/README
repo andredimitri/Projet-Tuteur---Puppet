@@ -1,0 +1,2 @@
+[16:08:10] Sébastien: (laptop) $ ssh -L 8888:kavlan-1.nancy:8888 access.nancy.grid5000.fr
+[16:09:00] Sébastien: (access.nancy) $ ssh -L 8888:puppet.ptut-grid5000.lan:3000 kavlan-1.nancy
