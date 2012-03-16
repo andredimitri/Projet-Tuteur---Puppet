@@ -5,13 +5,7 @@
 # Date:: Wed Mar 14 09:56:11 +0100 2012
 #
 
-# Class:: oar::base
-#Packages communs aux deux types de serveurs
-#
 
-
-
-## TODO : vérifier /etc/ssh/sshd_config
 #
 #installer les paquets
 #définir les node.pp
@@ -19,12 +13,25 @@
 #placer le module dans modules
 #ajouter ce qu'il faut dans puppet.conf et /etc/hosts
 
+
+#Class:: oar
+#Superclasse pour appeller les deux autres modules
+#
+class oar{
+	require => Class["oar::frontend"],
+	require => Class["oar::server"];
+}
+
+# Class:: oar::base
+#Packages communs aux deux types de serveurs
+#
+
 class oar::base{
 	user { "oar":
 		ensure  => present,
 		uid     => "1042",
 		gid     => "1042",
-		groups  => "kadeploy","oar",
+		groups  => ["kadeploy","oar"],
 		shell   => "/bin/sh",
 		home    => "/var/lib/oar",
 		managehome => true;
@@ -33,37 +40,42 @@ class oar::base{
 	
 	file { 
 	"/var/lib/oar/.ssh/config":
-		ensure => present,
+		ensure => file,
 		owner => oar,
 		groupe => oar,
 		source => "puppet:///oar/config";
 	
+	"/etc/ssh/sshd_config":
+		ensure => file,
+		source => "puppet:///oar/sshd_config";
+	
 	"/var/lib/oar/.ssh/authorized_keys":
-		ensure => present,
+		ensure => file,
 		owner => oar,
 		group => oar,
 		source => "puppet:///oar/authorized_keys";
 	
 	"/var/lib/oar/.ssh/id_rsa":
-		ensure => present,
+		ensure => file,
 		owner => oar,
 		group => oar,
 		source => "puppet:///oar/id_rsa";
 	
 	"/var/lib/oar/.ssh/id_rsa.pub":
-		ensure => present,
+		ensure => file,
 		owner => oar,
 		group => oar,
 		source => "puppet:///oar/id_rsa.pub";
 	
 	"/etc/apt/sources.list.d/oar.list":
-		ensure => present,
+		ensure => file,
 		source =>"puppet:///oar/oar.list";
 	}
 	
 	package { 
 	"oar-keyring":
 		ensure => installed,
+		command => "apt-get install -y --force-yes oar-keyring"
 		require => File["/etc/apt/sources.list.d/oar.list"];
 
 	"oar-common":
@@ -101,12 +113,12 @@ class oar::frontend inherits oar::base{
 	 
 	 file { 
 	"/etc/oar/prologue":
-		ensure => present,
+		ensure => file,
 		
 		owner => 'root',
 		group => 'root',
 	 "/etc/oar/epilogue":
-		ensure => present,
+		ensure => file,
 		owner => 'root',
 		group => 'root';
 	}
@@ -142,13 +154,13 @@ class oar::server inherits oar::base{
 
 	file { 
 	"/etc/oar/monika.cgi":
-		ensure => present,
+		ensure => file,
 		source => "puppet:///oar/monika.cgi";
 	"/etc/oar/drawgantt.cgi":
-		ensure => present,
+		ensure => file,
 		source => "puppet:///oar/drawgantt.cgi";
 	"/etc/oar/oar.conf":
-		ensure => present,
+		ensure => file,
 		source =>"puppet:///oar/oar.conf";
 	}
 }
