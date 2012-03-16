@@ -50,3 +50,7 @@ s5) Semaine du 26/02 au 02/03 :
 s6) Semaine du 05/03 au 09/03:
  - Optimisation des modules DNS et OAR pour Puppet.
  - Mise en place du DHCP.
+s7) Semaine du 12/03 au 18/03:
+ -Creation de la recette puppet pour le dashboard
+ -Optimisation de la recette concernant kadeploy3
+ -Optimisation de la recette d'OAR
