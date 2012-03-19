@@ -65,7 +65,7 @@ do
 	echo "machine$i	IN		A		$ip_machine" >> /etc/puppet/modules/bind/files/db.ptut-grid5000.lan
 	ip_oct_4=`echo $ip_machine |cut -d"." -f4 `
 	echo "$ip_oct_4		IN		PTR		machine$i.ptut-grid5000.lan." >> /etc/puppet/modules/bind/files/db.revers
-	echo "marocco-$i.ptut.grid5000.fr $ip_machines marocco" >> /etc/puppet/modules/kadeploy3/files/confsnodes
+	echo "marocco-$i.ptut.grid5000.fr $ip_machines marocco" >> /etc/puppet/modules/kadeploy/files/confs/nodes
         i=$(($i+1))
 done
 
@@ -78,7 +78,7 @@ vlan=`tail -1 list_users | cut -d '-' -f4`
 part1=KEY_$utilisateur
 part2=$USER@kavlan-$vlan
 
-sed -i s/KEY_RBLONDE/$part1/g /etc/puppet/modules/kadeploy3/files/confs/specific_conf_marocco
-sed -i s/rblonde@kavlan-1/$part2/g /etc/puppet/modules/kadeploy3/files/confs/specific_conf_marocco
+sed -i s/KEY_RBLONDE/$part1/g /etc/puppet/modules/kadeploy/files/confs/specific_conf_marocco
+sed -i s/rblonde@kavlan-1/$part2/g /etc/puppet/modules/kadeploy/files/confs/specific_conf_marocco
 
 exit 0 	
