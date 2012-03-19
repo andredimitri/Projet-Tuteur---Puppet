@@ -5,23 +5,7 @@
 # Date:: Wed Mar 14 09:56:11 +0100 2012
 #
 
-
-#
-#installer les paquets
-#définir les node.pp
-#définir les site.pp
-#placer le module dans modules
-#ajouter ce qu'il faut dans puppet.conf et /etc/hosts
-
-
 Exec { path => '/usr/bin:/bin:/usr/sbin:/sbin' }
-#Class oar
-#Superclasse pour appeller les deux autres modules
-#
-class oar{
-  include oar::frontend
-  include oar::server
-}
 
 # Class:: oar::base
 #Packages communs aux deux types de serveurs
@@ -123,24 +107,5 @@ class oar::frontend inherits oar::base{
 		mode => 0644,
 		owner => 'root',
 		group => 'root';
-	}
-}
-
-
-# Class:: oar::server
-#
-#Classe d'installation du serveur oar
-	
-class oar::server inherits oar::base{
-
-	package { 
-	["oar-admin","oar-server","oar-web-status","apache2"]:
-	 	ensure => installed;
-	}
-	file { 
-	"/etc/oar/oar.conf":
-		ensure => file,
-		mode => 0644,
-		source =>"puppet:///oar/oar.conf";
 	}
 }
