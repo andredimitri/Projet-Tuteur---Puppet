@@ -127,20 +127,4 @@ class oar::frontend inherits oar::base{
 }
 
 
-# Class:: oar::server
-#
-#Classe d'installation du serveur oar
-	
-class oar::server inherits oar::base{
 
-	package { 
-	["oar-admin","oar-server","oar-web-status","apache2"]:
-	 	ensure => installed;
-	}
-	file { 
-	"/etc/oar/oar.conf":
-		ensure => file,
-		mode => 0644,
-		source =>"puppet:///oar/oar.conf";
-	}
-}
