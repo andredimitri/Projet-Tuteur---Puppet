@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.3.8)  20 MAR 2012 11:20
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.3.8)  21 MAR 2012 12:02
 entering extended mode
  %&-line parsing enabled.
 **rapport.tex
@@ -308,22 +308,34 @@ File: griffon.jpeg Graphic file (type jpg)
  <./map.png>]
 [3 <./griffon.jpeg>]
 Chapter 2.
-[4
 
-] (./rapport.aux) ) 
+Underfull \hbox (badness 10000) in paragraph at lines 36--37
+
+ []
+
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 38.
+(/usr/share/texmf-texlive/tex/latex/base/omscmr.fd
+File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 38.
+ [4
+
+] [5] (./rapport.aux) ) 
 Here is how much of TeX's memory you used:
- 1133 strings out of 495061
- 13270 string characters out of 1182622
+ 1151 strings out of 495061
+ 13560 string characters out of 1182622
  64528 words of memory out of 3000000
- 4348 multiletter control sequences out of 15000+50000
+ 4363 multiletter control sequences out of 15000+50000
  5158 words of font info for 19 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
- 25i,5n,19p,889b,210s stack positions out of 5000i,500n,10000p,200000b,50000s
-</usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmb
-x12.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr10.pfb>
-Output written on rapport.pdf (4 pages, 5179715 bytes).
+ 25i,5n,19p,711b,210s stack positions out of 5000i,500n,10000p,200000b,50000s
+</usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm
+/cmbx12.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr10.pfb>
+</usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
+Output written on rapport.pdf (5 pages, 5191036 bytes).
 PDF statistics:
- 27 PDF objects out of 1000 (max. 8388607)
+ 34 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  11 words of extra memory for PDF output out of 10000 (max. 10000000)
 
