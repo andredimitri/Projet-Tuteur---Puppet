@@ -1,12 +1,3 @@
-# Module:: oar
-# Manifest:: init.pp
-#
-# Author:: Quentin Dexheimer
-# Date:: Wed Mar 14 09:56:11 +0100 2012
-#
-
-Exec { path => '/usr/bin:/bin:/usr/sbin:/sbin' }
-
 # Class:: oar::base
 #Packages communs aux deux types de serveurs
 #
@@ -32,33 +23,33 @@ class oar::base{
 		owner => oar,
 		group => oar,
 		mode => 0644,
-		source => "puppet:///oar-frontend/config";
+		source => "puppet:///oar/config";
 	"/etc/ssh/sshd_config":
 		ensure => file,
 		mode => 0646,
-		source => "puppet:///oar-frontend/sshd_config";
+		source => "puppet:///oar/sshd_config";
 	"/var/lib/oar/.ssh/authorized_keys":
 		ensure => file,
 		owner => oar,
 		group => oar,
 		mode => 0644,
-		source => "puppet:///oar-frontend/authorized_keys";
+		source => "puppet:///oar/authorized_keys";
 	"/var/lib/oar/.ssh/id_rsa":
 		ensure => file,
 		owner => oar,
 		group => oar,
 		mode => 0400,
-		source => "puppet:///oar-frontend/id_rsa";
+		source => "puppet:///oar/id_rsa";
 	"/var/lib/oar/.ssh/id_rsa.pub":
 		ensure => file,
 		owner => oar,
 		group => oar,
 		mode => 0400,
-		source => "puppet:///oar-frontend/id_rsa.pub";
+		source => "puppet:///oar/id_rsa.pub";
 	"/etc/apt/sources.list.d/oar.list":
 		ensure => file,
 		mode => 0644,
-		source =>"puppet:///oar-frontend/oar.list",
+		source =>"puppet:///oar/oar.list",
 		#notify => Exec["updating"];
 	}
 	
@@ -74,38 +65,20 @@ class oar::base{
 		path => '/usr/bin:/bin:/usr/sbin:/sbin';
 		}
 }
-	
-# Class:: oar::frontend
+# Class:: oar::server
 #
-# Classe pour l'installation de la machine de frontend
+#Classe d'installation du serveur oar
 	
-class oar::frontend inherits oar::base{
-	 package { 
-	 "oar-doc":
-	 	ensure => installed,
-	 	require => [File["/etc/apt/sources.list.d/oar.list"],Package["oar-keyring"]];
-	 
-	 "oar-user":
-	 	ensure => installed,
-	 	require => [File["/etc/apt/sources.list.d/oar.list"],Package["oar-keyring"]];
-	 "oar-node":
-	 	ensure => installed,
-	 	require => [File["/etc/apt/sources.list.d/oar.list"],Package["oar-keyring"]];
-	 
-	 "taktuk":
+class oar::server inherits oar::base{
+
+	package { 
+	["oar-admin","oar-server","oar-web-status","apache2"]:
 	 	ensure => installed;
-	 }
-	 
-	 file { 
-	"/etc/oar/prologue":
+	}
+	file { 
+	"/etc/oar/oar.conf":
 		ensure => file,
 		mode => 0644,
-		owner => 'root',
-		group => 'root';
-	 "/etc/oar/epilogue":
-		ensure => file,
-		mode => 0644,
-		owner => 'root',
-		group => 'root';
+		source =>"puppet:///oar/oar.conf";
 	}
 }

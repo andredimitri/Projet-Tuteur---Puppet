@@ -23,33 +23,33 @@ class oar::base{
 		owner => oar,
 		group => oar,
 		mode => 0644,
-		source => "puppet:///oar/config";
+		source => "puppet:///oar-server/config";
 	"/etc/ssh/sshd_config":
 		ensure => file,
 		mode => 0646,
-		source => "puppet:///oar/sshd_config";
+		source => "puppet:///oar-server/sshd_config";
 	"/var/lib/oar/.ssh/authorized_keys":
 		ensure => file,
 		owner => oar,
 		group => oar,
 		mode => 0644,
-		source => "puppet:///oar/authorized_keys";
+		source => "puppet:///oar-server/authorized_keys";
 	"/var/lib/oar/.ssh/id_rsa":
 		ensure => file,
 		owner => oar,
 		group => oar,
 		mode => 0400,
-		source => "puppet:///oar/id_rsa";
+		source => "puppet:///oar-server/id_rsa";
 	"/var/lib/oar/.ssh/id_rsa.pub":
 		ensure => file,
 		owner => oar,
 		group => oar,
 		mode => 0400,
-		source => "puppet:///oar/id_rsa.pub";
+		source => "puppet:///oar-server/id_rsa.pub";
 	"/etc/apt/sources.list.d/oar.list":
 		ensure => file,
 		mode => 0644,
-		source =>"puppet:///oar/oar.list",
+		source =>"puppet:///oar-server/oar.list",
 		#notify => Exec["updating"];
 	}
 	
@@ -79,6 +79,6 @@ class oar::server inherits oar::base{
 	"/etc/oar/oar.conf":
 		ensure => file,
 		mode => 0644,
-		source =>"puppet:///oar/oar.conf";
+		source =>"puppet:///oar-server/oar.conf";
 	}
 }
