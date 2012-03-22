@@ -52,7 +52,7 @@ mv dhcpd-kavlan-$vlan-$site.conf $puppet_modules/dhcp/files/dhcpd.conf
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 ##Déploiement du système d'exploitation Debian Squeeze-x64-base sur les nodes
 echo "-=-=-"
-echo "Liste des machines réservées:"
+echo "Liste des machines réservé:"
 kavlan -l
 
 ##récupération de toutes les nodes.
@@ -63,14 +63,14 @@ sed -n "1 p" $list_users > $puppet_clients
 sed -i "1 d" $list_users
 ##récupération des nodes clientes.
 cp $puppet_clients $puppet_masters
-for i in `seq 1 6`
+for i in `seq 1 7`
 do
 	sed -n '1p' $list_users >> $puppet_clients
 	sed -i '1d' $list_users
 done
 
 echo "-=-=-"
-echo "Déploiement de l'environnement Linux, Debian Squeeze 64bit, sur toutes les machines réservées (Peut prendre plusieurs minutes)."
+echo "Déploiement de l'environnement Linux, Debian Squeeze 64bit, sur toutes les machines réservé (Peut prendre plusieurs minutes)."
 kadeploy3 -e squeeze-x64-base -f $OAR_FILE_NODES --vlan $vlan -d -V4 -k $HOME/.ssh/id_dsa.pub &>/dev/null
 echo "-=-=-"
 
@@ -94,7 +94,7 @@ then
 		fi
 	done
 else 
-	echo "Erreur. Aucun fichier .ssh/config n'a pu être trouvé..."
+	echo "Erreur. Aucun fichier .ssh/config n'a pas été trouvé..."
 	echo "Arrêt de l'installation."
 	exit
 fi
@@ -109,7 +109,7 @@ fi
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #Vérification et configuration SSH de l'utilisateur
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-echo " - Vérification des clés ssh authorisées (.ssh/authorized_keys) de l'utilisateur "$USER
+echo " - Vérification des clé ssh authorisées (.ssh/authorized_keys) de l'utilisateur "$USER
 
 trouver=0
 
@@ -127,19 +127,19 @@ then
 			fi
 		done
 	else 
-		echo "Erreur. Aucun fichier .ssh/authorized_keys n'a pu être trouvé..."
+		echo "Erreur. Aucun fichier .ssh/authorized_keys n'a pas été trouvé..."
 		echo "Arrêt de l'installation."
 		exit
 	fi
 else
-	echo "Erreur. Aucun fichier .ssh/id_dsa.pub n'a pu être trouvé..."
+	echo "Erreur. Aucun fichier .ssh/id_dsa.pub n'a pas été trouvé..."
 	echo "Arrêt de l'installation."
 	exit	
 fi
 
 if [ $trouver -eq 1 ]
 then 
-	echo " - Ajout de la clé privée dans le fichier authorized_keys."
+	echo " - Ajout de la clé privé dans le fichier authorized_keys."
 	cat $HOME/.ssh/id_dsa.pub >> $HOME/.ssh/authorized_keys
 fi
 
@@ -187,18 +187,19 @@ scp -r $puppet_modules/ root@$puppet_master:/etc/puppet/ #&> lol.tmp
 ##attribution des rôles aux clients et ajout des clients dans nodes.pp
 echo "Attribution des rôles effectués:"
 echo "- "`sed -n '2 p' $puppet_clients `" : dhcp,"
-#echo "- "`sed -n '3 p' $puppet_clients `" : bind,"
+echo "- "`sed -n '3 p' $puppet_clients `" : bind,"
 echo "- "`sed -n '4 p' $puppet_clients `" : mysql,"
 echo "- "`sed -n '5 p' $puppet_clients `" : nfs,"
-echo "- "`sed -n '6 p' $puppet_clients `" : oar,"
-#echo "- "`sed -n '7 p' $puppet_clients `" : kadeploy." 
+echo "- "`sed -n '6 p' $puppet_clients `" : oar-server,"
+echo "- "`sed -n '7 p' $puppet_clients `" : oar-frontend,"
+echo "- "`sed -n '8 p' $puppet_clients `" : kadeploy." 
 
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #installation des clients puppet
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 ##installation via APT des paquets agent de puppet pour les clients 
-echo "Installation des paquets sur les machines clientes."
+echo "Installation des paquets sur les machines clientes"
 taktuk -l root -s -f $puppet_clients broadcast exec [ apt-get -q -y install puppet facter ] #&>/dev/null
 
 
@@ -238,11 +239,15 @@ echo "-=-=-"
 echo "Déploiement des demandes de certificat."
 taktuk -l root -f $puppet_clients broadcast exec [ puppet agent --test ] &>/dev/null
 ###signature des certificats
-echo "Signature des certificats."
+echo "signature des certificats."
 taktuk -l root -m $puppet_master broadcast exec [ puppet cert --sign --all ] &>/dev/null
 ###récupération des catalogues
-echo "Récupération des catalogues."
+echo "récupération des catalogues"
 taktuk -l root -f $puppet_clients broadcast exec [ puppet agent --test ] &>/dev/null
+
+taktuk -l root -s -f $puppet_master broadcast exec [ apt-get -q -y update ] #&>/dev/null
+taktuk -l root -s -f $puppet_master broadcast exec [ puppet agent --test ] #&>/dev/null
+
 
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -251,11 +256,11 @@ taktuk -l root -f $puppet_clients broadcast exec [ puppet agent --test ] &>/dev/
 ###Désactivation du DHCP g5k
 kavlan -d
 ###Rédémarrage du service réseau des clients. Pour le nouveau DHCP et pour le NFS.
-echo "Redémarrage des services..."
+echo "Redémarrage des services"
 #taktuk -l root -s -m `sed -n '4 p' $puppet_clients ` broadcast exec [ /etc/init.d/nfs-kernel-server reload ] &>/dev/null
 sed -i 1d $puppet_clients
 taktuk -l root -s -f $puppet_clients broadcast exec [ dhclient ] &>/dev/null
 taktuk -l root -s -f $list_users broadcast exec [ dhclient ] &>/dev/null
 rm lol.tmp
 echo "-=-=-"
-echo "Fin de déploiement !"
+echo "Fin de déploiement"
