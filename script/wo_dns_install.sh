@@ -63,7 +63,7 @@ sed -n "1 p" $list_users > $puppet_clients
 sed -i "1 d" $list_users
 ##récupération des nodes clientes.
 cp $puppet_clients $puppet_masters
-for i in `seq 1 6`
+for i in `seq 1 7`
 do
 	sed -n '1p' $list_users >> $puppet_clients
 	sed -i '1d' $list_users
@@ -190,8 +190,9 @@ echo "- "`sed -n '2 p' $puppet_clients `" : dhcp,"
 echo "- "`sed -n '3 p' $puppet_clients `" : bind,"
 echo "- "`sed -n '4 p' $puppet_clients `" : mysql,"
 echo "- "`sed -n '5 p' $puppet_clients `" : nfs,"
-echo "- "`sed -n '6 p' $puppet_clients `" : oar,"
-echo "- "`sed -n '7 p' $puppet_clients `" : kadeploy." 
+echo "- "`sed -n '6 p' $puppet_clients `" : oar-server,"
+echo "- "`sed -n '7 p' $puppet_clients `" : oar-frontend,"
+echo "- "`sed -n '8 p' $puppet_clients `" : kadeploy." 
 
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -239,6 +240,9 @@ taktuk -l root -m $puppet_master broadcast exec [ puppet cert --sign --all ] #&>
 ###récupération des catalogues
 echo "récupération des catalogues"
 taktuk -l root -f $puppet_clients broadcast exec [ puppet agent --test ] #&>/dev/null
+
+taktuk -l root -s -f $puppet_master broadcast exec [ apt-get -q -y update ] #&>/dev/null
+taktuk -l root -s -f $puppet_master broadcast exec [ puppet agent --test ] #&>/dev/null
 
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

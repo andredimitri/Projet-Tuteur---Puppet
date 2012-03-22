@@ -2,11 +2,13 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
+\usepackage{listings}
 \begin{document}
 
-\part{Le Grid5000}
-	\chapter{Présentation du Grid5000}
-Le Grid5000 est une grille informatique destinée à la recherche scientifique. Le projet a vu le jour en 2003 et a pour but de promouvoir la recherche sur les grilles informatiques en France. Le Grid5000 est aujourd'hui composé de 1200 noeuds répartis sur 9 sites différents situés en France et au Luxembourg et interconnectés avec le réseau Réseau National de télécommunications pour la Technologie l'Enseignement et la Recherche (RENATER). L'objectif du Grid5000 est de permettre aux scientifiques d'effectuer des expériences dans le domaine des systèmes informatiques et des réseaux distribués dans un environnement hétérogène aussi proche de la réalité que possible.
+\chapter{Le Grid'5000}
+	\section{Présentation du Grid'5000}
+	Aladdin ???????????
+Le Grid'5000 est une grille informatique destinée à la recherche scientifique. Le plateforme a vu le jour en 2003 et a pour but de promouvoir la recherche sur les grilles informatiques en France. Le Grid'5000 est aujourd'hui composé de 1200 noeuds répartis sur 9 sites différents situés en France et au Luxembourg et interconnectés avec le réseau Réseau National de télécommunications pour la Technologie l'Enseignement et la Recherche (RENATER). L'objectif du Grid'5000 est de permettre aux scientifiques d'effectuer des expériences dans le domaine des systèmes informatiques et des réseaux distribués dans un environnement hétérogène aussi proche de la réalité que possible.
 
 	\begin{figure}[!h]
 		\centering
@@ -15,9 +17,11 @@ Le Grid5000 est une grille informatique destinée à la recherche scientifique. 
     	\label{fig:map}
 	\end{figure} 
 
-Le Grid5000 est donc composé de plusieurs sites distincts mais l'organisation au sein de chaque site est la même. Chaque site est composé d'un ou plusieurs clusters, c'est à dire un ensemble de machine homogène.Le site de Nancy par exemple héberge deux clusters nommés Griffon et Graphene. \\
-A l'intérieur de chaque cluster se trouvent des ordinateurs aussi appelés "nodes" ou "noeuds". Il existe deux types de nodes : les noeuds de services et les noeuds de travail, sur lesquels sont efectuées les expériences. Les noeuds de services servent à l'administration des machines situées dans le cluster et à l'accès aux hôtes virtuels pour les administrateurs. Certains noeuds de services appelés "frontends" sont utilisés par les utilisateurs pour accéder aux différents sites grâce au protocole ssh, la réservation de noeuds et le déploiement. 
-
+Le Grid'5000 est donc composé de plusieurs sites distincts mais l'organisation au sein de chaque site est la même. Chaque site est composé d'un ou plusieurs clusters, c'est à dire un ensemble de machine homogène.Le site de Nancy par exemple héberge deux clusters nommés Griffon et Graphene. \\
+A l'intérieur de chaque cluster se trouvent des ordinateurs aussi appelés "nodes" ou "noeuds". Il existe deux types de nodes : les noeuds de services et les noeuds de travail, sur lesquels sont effectuées les expériences.\\
+ Les noeuds de services servent à l'administration des machines situées dans les cluster et à l'accès aux hôtes virtuels pour les administrateurs. Les machines de services sont commune aux différents clusters situées sur les sites. Certains noeuds de services appelés "frontends" sont utilisés par les utilisateurs pour accéder aux différents sites grâce au protocole ssh, la réservation de noeuds et le déploiement. \\
+L'administration de la plateforme est centralisée et est assurée par 8 personnes parmis elle certains travaille à plein temps sur la plateforme alors que d'autres non.\\
+Il existe donc une hiérarchie dans la plateforme Grid'5000. Au sommet de cette hiérarchie se trouve la plateforme en elle m\^me ensuite les différents sites géographique. Au niveau inférieur on trouve les différents services et clusters puis les noeuds.  Ensuite on trouve les CPUS et enfin les cores.
 \begin{figure}[!h]
 		\centering
    		\includegraphics[width=5cm,height=5cm]{griffon.jpeg}
@@ -25,16 +29,23 @@ A l'intérieur de chaque cluster se trouvent des ordinateurs aussi appelés "nod
     	\label{fig:griffon}
 	\end{figure}
 	
-	\chapter{Les outils du Grid5000}
-		Le Grid5000 est composé de plusieurs services: une partie ces services ont été développés uniquement pour ce projet comme par exemple Kadeploy3 qui a été developpé par l'INRIA Nancy - Grand Est; les autres sont des services standard déjà utilisés sur les systèmes Unix.  
-		\section{OAR2}			
+	\section{Les outils du Grid'5000}
+		Le Grid'5000 est composé de plusieurs services: une partie ces services ont été développés uniquement pour cette plateforme comme par exemple Kadeploy3 qui a été developpé par l'INRIA Nancy - Grand Est; les autres sont des services standard déjà utilisés sur les systèmes Unix.  
+		\subsection{OAR2}			
 			OAR est un gestionnaire de ressources pour de grandes grilles informatique. Il est écrit en PERL et s'appuie sur une base SQL (PostgreSQL ou MySQL). OAR permet le déploiement, la réservation  et le management des noeuds et des jobs \footnote{un job correspond à une t\^ache affectée à une reservation}. OAR permet aussi d'effectuer des réservations planifiées de jobs pour une durée donnée en utilisant un nombre défini de noeuds. \\
 			
-		\section{Kadeploy3}
+		\subsection{Kadeploy3}
 			Kadeploy est un outil qui permet le déploiement des différents systèmes d'exploitation sur les noeuds de la plateforme. Il permet aussi de configurer les noeuds, de les cloner et de les manager. Il permet le déploiement de système Linux, BSD, Windows et Solaris.
-		\section{Taktuk}
-			Taktuk est un outil complémentaire à OAR2. Taktuk permet l'éxecution de commandes à distance sur un grand nombre de noeuds hétérogènes. Il met en place un liaison entre la "frontends" et les noeuds concernées par la commande et s'adapte  à l'environnement de la machine (les perfomances , la charges , le réseau ...).  
-		\section{KaVLAN}
+		\subsection{Taktuk}
+			Taktuk est un outil complémentaire à OAR2. Taktuk permet l'éxecution de commandes à distance sur un grand nombre de noeuds hétérogènes. Il met en place un liaison entre la "frontends" et les noeuds concernées par la commande et s'adapte  à l'environnement de la machine (les perfomances , la charges , le réseau ...). 
+			\begin{lstlisting}
+					taktuk -l root -s -m $puppet_master broadcast exec [ apt-get -q -y install puppet facter puppetmaster ]
+			
+			L'option -l permet d'utiliser le compte root pour l'installation.
+			L'option -m permet de déployer sur une seule machine alors que l'option -f permet de déployer sur toute les machines contenu dans le fichier.
+			Cette commande permet donc de déployer les paquets puppet, facter et puppetmaster sur la machine puppet\_master.
+			\end{lstlisting}
+		\subsection{KaVLAN}
 			KaVLAN est un outil qui a pour but de permettre la mise en place d'un VLAN sur des noeuds du Grid5000. Il permet la mise en place de plusieurs type de VLAN : local, "router" et global. KaVLAN peut être utilisé en complément de Kadeploy et de OAR pour certains types d'expérimentation.\\
 			\begin{itemize}
   				\item Un KaVLAN local est un VLAN complètement isolé du reste de la plateforme Grid5000. Il est alors obligatoire d'utiliser une gateway pour accéder aux noeuds se trouvant à l'intérieur de VLAN.
@@ -42,13 +53,31 @@ A l'intérieur de chaque cluster se trouvent des ordinateurs aussi appelés "nod
  				 \item Un KaVLAN global est un VLAN qui est disponible sur tous les sites du Grid5000. Un routeur est alors configuré sur le site où le VLAN a été configuré.
 			\end{itemize}
 			
-		\section{Les autres outils}
+		\subsection{Les autres outils}
 			Le Grid5000 utilise pour son fonctionnement d'autres outils :
 				\begin{itemize}
-					\item une base de donnée MySQL ou PostgreSQL. Cette base de donnée va \^etre utilisée par Kadeploy et OAR.
-					\item un serveur DNS				
-					\item un serveur DHCP
-					\item un serveur NFS pour permettre aux utilisateurs de stocker des informations dans leur /home sur les différents sites.
+					\item une base de donnée MySQL . Cette base de donnée va \^etre utilisée par Kadeploy et OAR.
+					\item un serveur DNS (Domaine Name Server) qui permet de faire la correspondance entre les adresses ip et les nom de domaine.			
+					\item un serveur DHCP (Dynamic Host Configuration Protocol) qui permet la configuration automatique des paramètres IP des machines.
+					\item un serveur NFS (Network File System) pour permettre aux utilisateurs de stocker des informations dans leur /home sur les
+ différents sites.
+ 					\item des  outils de supervision : \begin{itemize}
+ 															\item Nagios : surveille les hôtes et services spécifiés, alertant lorsque les systèmes vont mal et quand ils vont mieux.
+ 															\item Ganglia : permet de superviser des clusters et des grilles informatiques. 
+ 															\item Munin : présente ses résultats sous forme de graphiques disponibles via une interface web.
+ 															\item Cacti : mesure les performances réseau et serveur.
+ 														\end{itemize}
+ 					\item un serveur weathermap : qui permet la visualisation du réseau sous forme d'une carte.
+ 					\item un serveur syslog : qui permet les journaux d'évènements.
+ 					\item un annuaire LDAP ( Lightweight Directory Access Protocol) : permet le stockage d'informations et de données.
+ 					\item un serveur web Apache avec un proxy.
+ 					\item un serveur Squid :  un proxy/reverse proxy
+ 					\item un serveur NAT (Network Address Translation) : permet de faire correspondre une seule adresse externe publique visible sur Internet à toutes les adresses d'un réseau privé
+ 					\item un serveur mail.
+ 					\item un dep\^ots de paquets et de logiciels.
+ 					\item API Rest g5k : utiliser par KaVLAN et Kadeploy. Elle permet ??????
+ 					\item une infrastructure de virtualisation XEN comportant de 2 à 5 dom0 et environ 30 domU avec un service par domU.
+ 					
 				\end{itemize}
 	
 \end{document}
