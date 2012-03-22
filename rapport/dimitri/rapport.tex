@@ -155,9 +155,28 @@ Il existe donc une hiérarchie dans la plateforme Grid'5000. Au sommet de cette 
 			\begin{itemize}
   				\item Un KaVLAN local est un VLAN complètement isolé du reste de la plateforme Grid5000. Il est alors obligatoire d'utiliser une gateway pour accéder aux noeuds se trouvant à l'intérieur de VLAN.
   				\item Un KaVLAN "router" permet l'accès à tous les noeuds du VLAN depuis le reste du Grid5000 sans utiliser de gateway.
- 				 \item Un KaVLAN global est un VLAN qui est disponible sur tous les sites du Grid5000. Un routeur est alors configuré sur le site où le VLAN a été configuré.
+ 				 \item Un KaVLAN global est un VLAN qui est disponible sur tous les sites du Grid5000. Un routeur est alors configuré sur le site où le VLAN a été configuré.\\
 			\end{itemize}
-			
+			\surligne {Exemple :}\\ 
+			\begin{lstlisting}
+					oarsub -I -t deploy -l {"type='kavlan-local'"}/vlan=1+/nodes=$nbr_nodes,walltime=$tmps -n "$nom"
+			\end{lstlisting}
+			La commande suivante permet de réserver un nombre donné de noeuds en utilisant un VLAN local.
+			Kavlan dispose d'autres commande utile comme : \\
+				\begin{itemize}
+					\item La commande qui  permet d'avoir la liste des machines qui se trouvent à l'intérieur d'un VLAN pour un job donné est :
+						\begin{lstlisting}
+							kavlan -V -j JOBID
+						\end{lstlisting}
+					\item Celle qui permet d'activer le dhcp interne à KaVLAN est : 
+					 	\begin{lstlisting}
+							kavlan -e
+						\end{lstlisting}
+					\item La commande qui permet de désactiver le dhcp est : 
+						\begin{lstlisting}
+							kavlan -d
+						\end{lstlisting}
+					\end{itemize}
 		\subsection{Les autres outils}
 			Le Grid5000 utilise pour son fonctionnement d'autres outils :
 				\begin{itemize}
@@ -180,7 +199,7 @@ Il existe donc une hiérarchie dans la plateforme Grid'5000. Au sommet de cette 
  					\item un serveur NAT (Network Address Translation) : permet de faire correspondre une seule adresse externe publique visible sur Internet à toutes les adresses d'un réseau privé
  					\item un serveur mail.
  					\item un dep\^ots de paquets et de logiciels.
- 					\item API Rest g5k : utiliser par KaVLAN et Kadeploy. Elle permet ??????
+ 					\item API Rest g5k : utiliser par KaVLAN, Kadeploy et UMS (User Management System). Elle permet d'utiliser toute les fonctions du Grid'5000 et de les automatiser.
  					\item une infrastructure de virtualisation XEN comportant de 2 à 5 dom0 et environ 30 domU avec un service par domU.
  					
 				\end{itemize}

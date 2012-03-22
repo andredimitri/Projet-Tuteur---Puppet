@@ -6,26 +6,38 @@ class dashboard::config {
       owner   => root,
       group   => root,
       mode    => 644;
+      
+    "/etc/apt/sources.list":
+      source  => "puppet:///dashboard/sources.list",
+      ensure  => file,
+      owner   => root,
+      group   => root,
+      mode    => 644;
+      
+    "/etc/default/puppet-dashboard":
+      source  => "puppet:///dashboard/puppet-dashboard",
+      ensure  => file,
+      owner   => root,
+      group   => root,
+      mode    => 644;
+      
+    "/etc/default/puppet-dashboarrd-workers":
+      source  => "puppet:///dashboard/puppet-dashboard-workers",
+      ensure  => file,
+      owner   => root,
+      group   => root,
+      mode    => 644;
   }
 
   exec {
     "Import puppet key":
-      command       => "/bin/cat /root/pubkey.gpg | /usr/bin/apt-key add -",
-      user	  => root,
-      require	  => File["/root/pubkey.gpg"];
-  }
+      command	=> "/bin/cat /root/pubkey.gpg | /usr/bin/apt-key add -",
+      user		=> root,
+      require	=> File["/root/pubkey.gpg"];
 
-  custom::config {
-    "Enable Dashboard":
-      file  => "/etc/default/puppet-dashbaord",
-      pattern => "START",
-      line => "START=yes",
-      engine => "replaceline";
-    "Enable Dashboard Workers":
-      file  => "/etc/default/puppet-dashbaord-workers",
-      pattern => "START",
-      line => "START=yes",
-      engine => "replaceline";
+    "Apt Update":
+      command	=> "/usr/bin/apt-get update",
+      user		=> root,
   }
  
 }

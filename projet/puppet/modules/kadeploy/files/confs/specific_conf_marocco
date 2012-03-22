@@ -1,0 +1,39 @@
+deploy_kernel = deploy-vmlinuz-2.6.31.4
+deploy_initrd = deploy-initrd-2.6.31.4 ETH_DRV=e1000e ETH_DEV=eth0 DISK_DRV=ata_piix console=tty0 console=ttyS0,38400n8 ramdisk_size=290000 rw noapic init=/linuxrc
+block_device = /dev/sda
+prod_part = 2
+deploy_part = 3
+tmp_part = 5
+
+# Kareboot
+timeout_reboot_classical = 250
+timeout_reboot_kexec = 100
+cmd_soft_reboot = ssh -q -o BatchMode=yes -o StrictHostKeyChecking=no -o PreferredAuthentications=publickey -o ConnectTimeout=2 -o SetupTimeOut=5 -o UserKnownHostsFile=/dev/null -i KEY_RBLONDE rblonde@kavlan-1 "kareboot -r simple_reboot HOSTNAME_FQDN  >/dev/null &"
+#cmd_hard_reboot = /usr/bin/lanpower -d -c cycle -m HOSTNAME_SHORT
+#cmd_very_hard_reboot = /usr/bin/lanpower -d -c safety_cycle -m HOSTNAME_SHORT
+
+# Kapower
+#cmd_hard_power_on = /usr/bin/lanpower -d -c on -m HOSTNAME_SHORT
+#cmd_soft_power_off = ssh -q -o BatchMode=yes -o StrictHostKeyChecking=no -o PreferredAuthentications=publickey -o ConnectTimeout=2 -o SetupTimeOut=5 -o UserKnownHostsFile=/dev/null -i /etc/kadeploy3/keys/id_deploy root@HOSTNAME_FQDN "nohup /sbin/halt &>/dev/null &"
+#cmd_hard_power_off = /usr/bin/lanpower -d -c off -m HOSTNAME_SHORT
+#cmd_power_status = /usr/bin/lanpower -d -m HOSTNAME_FQDN -s
+
+# Pdu
+#cmd_very_hard_power_off = /usr/sbin/pdumix -n HOSTNAME_FQDN -d
+#cmd_soft_power_on = /usr/sbin/pdumix -n HOSTNAME_FQDN -u
+
+# Kaconsole
+#cmd_console = /usr/local/conman/bin/conman -d conman HOSTNAME_SHORT
+
+#drivers = ata_piix
+kernel_params = console=tty0 console=ttyS0,38400n8
+#nfsroot_kernel = deploy-vmlinuz-2.6.31.4-nfsroot
+#nfsroot_params = rw console=ttyS0,38400n8 console=tty0 root=/dev/nfs ip=dhcp nfsroot=172.24.120.35:/mnt/nfsroot/rootfs init=/sbin/init
+admin_post_install = /var/partage/preinstalls/preinstall-griffon.tgz|tgz|none
+partition_creation_kind = fdisk
+pxe_header = PROMPT 1\nSERIAL 0 38400\nDEFAULT bootlabel\nDISPLAY messages\nTIMEOUT 50\n\nlabel bootlabel\n
+
+#Automata description
+macrostep = SetDeploymentEnv|SetDeploymentEnvUntrusted:2:450
+macrostep = BroadcastEnv|BroadcastEnvKastafior:1:900
+macrostep = BootNewEnv|BootNewEnvClassical:1:400,BootNewEnvHardReboot:1:400

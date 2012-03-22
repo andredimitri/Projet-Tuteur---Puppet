@@ -3,6 +3,7 @@ class mysql::install {
     ensure => present,
     require => User["mysql"],
   }
+
   user {
     "mysql":
     ensure => present,
@@ -15,10 +16,12 @@ class mysql::install {
     "mysql":
     ensure => present,
   }
+
   exec {
     "MySQL Kadeploy":
       command       => "/usr/bin/mysql --execute=\"CREATE DATABASE deploy3\";",
       user          => root,
       unless        => "/usr/bin/mysql --execute=\"SHOW DATABASES;\" | grep '^deploy3$'";
   }
+
 }

@@ -1,0 +1,5 @@
+#We can specify here specific commands for specific nodes
+#vm-001|reboot_soft|ssh -q -o BatchMode=yes -o StrictHostKeyChecking=no -o ConnectTimeout=2 root@vm-001 /sbin/reboot
+#vm-001|reboot_hard|vmware-cmd /home/ejeanvoi/vmware/vm-001/vm-001.vmx reset hard
+#vm-002|reboot_soft|ssh -q -o BatchMode=yes -o StrictHostKeyChecking=no -o ConnectTimeout=2 root@vm-002 /sbin/reboot
+#vm-002|reboot_hard|vmware-cmd /home/ejeanvoi/vmware/vm-002/vm-002.vmx reset hard

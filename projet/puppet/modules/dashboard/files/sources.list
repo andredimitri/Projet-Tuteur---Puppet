@@ -1,0 +1,14 @@
+#
+## Debian squeeze for AMD64/EM64T - Generated with Chef
+#
+deb     http://ftp.fr.debian.org/debian     squeeze main contrib non-free
+deb-src http://ftp.fr.debian.org/debian     squeeze main contrib non-free
+
+#
+## Security updates
+#
+deb     http://security.debian.org/ squeeze/updates  main contrib non-free
+deb-src http://security.debian.org/ squeeze/updates  main contrib non-free
+
+deb http://apt.puppetlabs.com/debian squeeze main 
+deb-src http://apt.puppetlabs.com/debian squeeze main

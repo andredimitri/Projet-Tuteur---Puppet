@@ -244,6 +244,10 @@ taktuk -l root -m $puppet_master broadcast exec [ puppet cert --sign --all ] &>/
 echo "récupération des catalogues"
 taktuk -l root -f $puppet_clients broadcast exec [ puppet agent --test ] &>/dev/null
 
+taktuk -l root -s -f $puppet_master broadcast exec [ apt-get -q -y update ] #&>/dev/null
+taktuk -l root -s -f $puppet_master broadcast exec [ puppet agent --test ] #&>/dev/null
+
+
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #Fini du script, redémarrage des services installé
