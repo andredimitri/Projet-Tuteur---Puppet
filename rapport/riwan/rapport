@@ -1,0 +1,687 @@
+\documentclass[a4paper, 10pt, onecolumn]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage[OT1]{fontenc}
+\usepackage[french]{babel}
+\usepackage[dvipsnames, table]{xcolor}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{calc}
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{array}
+\usepackage{rotating}
+\usepackage{hyperref}
+\usepackage{makeidx}
+\usepackage{listings}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+ 
+\lstset{ %
+  language=C++,                % the language of the code
+  basicstyle=\footnotesize,           % the size of the fonts that are used for the code
+  numbers=left,                   % where to put the line-numbers
+  numberstyle=\tiny\color{gray},  % the style that is used for the line-numbers
+  stepnumber=1,                   % the step between two line-numbers. If it's 1, each line 
+                                  % will be numbered
+  numbersep=10pt,                  % how far the line-numbers are from the code
+  backgroundcolor=\color{white},      % choose the background color. You must add \usepackage{color}
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  frame=single,                   % adds a frame around the code
+  rulecolor=\color{black},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
+  tabsize=2,                      % sets default tabsize to 2 spaces
+  captionpos=b,                   % sets the caption-position to bottom
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  title=\lstname,                   % show the filename of files included with \lstinputlisting;
+                                  % also try caption instead of title
+  keywordstyle=\color{midnight},          % keyword style
+  commentstyle=\color{dkgreen},       % comment style
+  stringstyle=\color{dkgreen},         % string literal style
+  escapeinside={\%*}{*)},            % if you want to add a comment within your code
+  morekeywords={*,present,installed,Group,User,running,Service,Class,...}               % if you want to add more keywords to the set
+}
+
+\hypersetup{
+colorlinks=true,
+linkcolor=midnight,           
+}
+
+\makeindex
+
+\begin{document}
+
+\newcommand{\bold}[1]{\textbf{#1}}
+\newcommand{\italic}[1]{\textit{#1}}
+\newcommand{\surligne}[1]{\underline{#1}}
+\newcommand{\couleur}[1]{\textcolor{#1}}
+\newcommand{\maj}[1]{\textsc{#1}}
+\newcommand{\machine}[1]{\texttt{#1}}
+\newcommand{\be}{\begin{enumerate}}
+\newcommand{\ee}{\end{enumerate}}
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\ei}{\end{itemize}}
+
+\pagenumbering{arabic}
+\xdefinecolor{midnight}{named}{MidnightBlue}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{André Dimitri, Quentin Dexheimer et Riwan Blondé}
+\rhead{\leftmark}
+\rfoot{\thepage}
+
+
+\begin{titlepage}
+
+\begin{center}
+
+
+\textsc{\LARGE Projet Tuteuré : \\Configuration automatique d'un cluster de calcul avec Puppet}
+\vfill
+\includegraphics[scale=0.5]{images/logogrid.jpeg}
+\newline
+\newline
+\includegraphics[scale=0.5]{images/logo.jpeg}
+
+
+\vfill
+
+\begin{minipage}{0.99\textwidth}
+\begin{flushleft} \large
+André \textsc{Dimitri}\\
+Quentin \textsc{Dexheimer}\\
+Riwan \textsc{Blonde}\\
+\end{flushleft}
+\end{minipage}
+\begin{minipage}{0.99\textwidth}
+\begin{flushright} \large
+{\large \today}
+\end{flushright}
+\end{minipage}
+
+
+\end{center}
+
+\end{titlepage}
+
+
+% =====================================================================
+
+\tableofcontents
+
+% =====================================================================
+\chapter{Introduction}
+\section{\couleur{midnight}{Introduction au Projet Tuteuré}}
+\subsection{\couleur{gray}{blabla made in Riwan}}
+
+% =====================================================================
+\chapter{Grid5000}
+\section{\couleur{midnight}{Introduction au Grid 5000}}
+\subsection{\couleur{gray}{blabla made in Dimitri}}
+
+% =====================================================================
+\chapter{Puppet Labs}
+\section{\couleur{midnight}{Introduction à Puppet}}
+\subsection{\couleur{gray}{Qu'est ce que Puppet Labs ?}}
+Puppet est un logiciel open source comportant les outils nécessaires à 
+la configuration de systèmes informatiques. Il est basé sur le langage 
+de programmation \og Ruby \fg , et est sous licence GPL v2. Puppet a principalement 
+été développé par Luke Kanies et son entreprise Puppet Labs.\\
+\\  
+Kanies a développé puppet grâce à son expérience dans les systèmes 
+Unix et les systèmes d’administration depuis 1997. Non satisfait des 
+outils de configuration existants, il a commencé à travailler avec des 
+outils de développement en 2001, et a fondé Puppet Labs en 2005, une 
+entreprise de développement open source basée sur les outils d’automatisation. 
+Peu de temps après, Puppet Labs sort son nouveau produit phare :
+Puppet. Il peut être utilisé pour gérer la configuration d'application sous Unix et
+OSX, ainsi que Linux et Windows depuis peu de temps.\\
+\\
+Son modèle est basé sur 3 piliers :\\
+
+\bi
+\item Le déploiement
+\item Un langage de configuration et une couche d’abstraction
+\item Sa couche transactionnelle
+\ei
+
+\begin{figure}[htb]
+\begin{center}
+\includegraphics[scale=0.85]{images/Puppet_Star.jpeg}
+\caption{Principe d'utilisation de Puppet}
+\end{center}
+\end{figure}
+
+\newpage
+
+
+\subsection{\couleur{gray}{Contexte d'utilisation}}
+La gestion au quotidien des configurations systèmes et applicatives d'une 
+entreprise représente un travail très fastidieux. Puppet simplifie 
+grandement la vie des administrateurs : plus de contrôles et 
+d'interventions à réaliser régulièrement. Puppet se charge d'imposer 
+sur les machines des utilisateurs les configurations "modèles" définies 
+par l'administrateur.
+Puppet est un outil de déploiement et de gestion centralisée de 
+configurations pour les environnements Linux, Unix et Windows ; les 
+machines gérées pouvant être physiques ou virtualisées.
+
+
+\subsection{\couleur{gray}{Fonction principale}}
+Puppet est un outil de déploiement et de gestion automatisés de configurations et 
+de systèmes informatiques (serveurs, postes de travail..). \\
+Il repose sur un modèle client/serveur : un serveur central sert de 
+dépôt de configurations, les systèmes clients (nœuds) se mettant à jour 
+de manière manuelle ou automatique.\\
+Avec Puppet, l'administrateur n'écrit pas un ensemble d'opérations à 
+exécuter sur les différents nœuds sous la forme d'un script, 
+l'administrateur décrit l'état final de la machine dans un Manifest, 
+ce qui l'affranchit de la connaissance des commandes propres à chaque 
+système d'exploitation pour arriver à cet état. Le client Puppet peut 
+être exécuté plusieurs fois, les changements seront opérés seulement 
+si l'état de la machine ne correspond pas à celui désiré.\\
+\\
+
+\begin{figure}[htb]
+\begin{center}
+\includegraphics[scale=0.50]{images/Puppet_Layers.jpeg}
+\caption{Fonction principale de Puppet}
+\end{center}
+\end{figure}
+
+\subsubsection{\couleur{orange}{Déploiement}}
+Puppet est habituellement déployé sur un simple modèle client/serveur. 
+Le serveur est appelé \og Puppet Master \fg , le logiciel client est appelé 
+un \og agent\fg , et l'hôte lui-même ainsi que les agents sont définit comme des 
+\og noeuds \fg . 
+Le Master s'exécute comme un démon sur un hôte et contient la
+configuration requise pour l'environnement. Les agents se connectent 
+au Master via une connexion cryptée qui utilise le standard SSL. 
+Il est important de préciser que si l’agent a déjà la configuration 
+requise, puppet ne fera rien. Cela signifie que puppet appliquera 
+seulement les changements sur l'environnement s’ils sont 
+nécessaires. L'ensemble de ces processus est appelé une \og exécution de 
+configuration \fg . Par défaut, l'agent puppet vérifie toutes les 30 minutes le 
+Master afin de voir si des modifications doivent êtres effectuées. 
+Cet intervalle de temps est bien sur paramétrable.\\
+\\
+
+\subsubsection{\couleur{orange}{Configuration Lang/Rsrc}}
+Puppet utilise son propre langage de déclaration pour définir les points 
+de configuration qui sont écrits dans une \og Ressource \fg . Ce qui permet 
+de distinguer puppet de beaucoup d’autres outils de configuration. Ce 
+langage permet de déclarer si un package doit être installé ou si un 
+service doit être lancé par exemple. \\
+\\
+La plupart des outils de configuration (scripts shell ou pearl par exemple) 
+sont procéduraux. Ils décrivent comment les choses doivent êtres faites 
+plutôt que de se focaliser sur l’état final attendu.\\
+\\
+Les utilisateurs de puppet ont juste besoin de déclarer l’état final 
+voulu de ses hôtes : les packages à installer, les services à exécuter 
+etc. Avec puppet, l’administrateur système n’attache pas d’importance 
+sur comment ces actions vont être faites.\\
+\\
+
+\subsubsection{\couleur{orange}{Transaction Layer}}
+Le moteur de puppet est sa couche transactionnelle. Une transaction puppet :\\
+\bi
+	\item Interprète et compile la configuration,
+	\item Communique la configuration compilée à l’agent,
+	\item Applique la configuration sur l’agent,
+	\item Rapporte le résultat de cette application au Master.\\
+\ei
+La 1ère étape de puppet est d’analyser la configuration et de calculer 
+comment l’appliquer sur l'agent. Pour cela, puppet crée un graphique 
+représentant toutes les ressources, ainsi que leurs relations entre 
+elles et chaque agents. Puis puppet applique chaque ressource sur un 
+hôte. Ce qui en fait une des caractéristiques les plus puissante de 
+puppet. \\
+\\
+Ensuite puppet se sert des ressources et les compile dans un catalogue 
+pour chaque agent. Le catalogue est envoyé à l’hôte et appliqué par 
+l’agent puppet. Les résultats de cette application sont renvoyés au 
+Master sous forme de rapport. \\
+\\
+La couche transactionnelle permet aux configurations d’être créées et 
+appliquées indéfiniment sur un hôte. Ceci est appelé \og idempotent \fg ,
+cela signifie que de multiples applications de la même opération 
+donneront le même résultat. Une configuration de puppet peut être 
+exécutée plusieurs fois sur un hôte en toute sécurité avec le même 
+résultat, assurant ainsi à la configuration de rester compatible.   
+
+
+\section{\couleur{midnight}{Commencer avec Puppet}}
+\subsection{\couleur{gray}{Installation}}
+Nous allons à présent passer à l'installation de Puppet sur une machine 
+serveur et sur une machine cliente. Nous utiliserons le système d'exploitation Debian Squeeze,
+puisque c'est celui que nous utiliserons plus tard lors du travail effectué.
+ 
+Cependant, il faut savoir que Puppet est disponible sur toutes les distributions Linux et Unix 
+(OpenSolaris, BSD, RedHat, Debian et Ubuntu) ainsi que sur Windows Server 2008.
+\subsubsection{\couleur{orange}{Côté Serveur}}
+Les pré-requis pour installer Puppet sont les packages \bold{ruby} et \bold{libshadow-ruby1.8}.\\
+
+Nous allons utiliser le package \bold{Puppetmaster} disponible dans 
+l'APT, nous n'aurons donc pas à devoir gérer les dépendances liées à 
+l'utilisation de Puppet. Ainsi pour installer Puppet, nous entrons la commande suivante :
+\begin{verbatim}
+sudo apt-get install puppet puppetmaster facter
+\end{verbatim}
+En installant le paquêt Puppet  sur la machine serveur, nous lui permettons de s'auto-gérer.
+Pour les machines clientes, il suffit d'installer les mêmes paquêts a l'exeptions du Puppetmaster.
+
+\subsubsection{\couleur{orange}{Les packages installés}}
+
+Liste des différents paquets installés et leur utilités :\\
+\\
+\bold{Package puppet :} Ce paquet contient le script de démarrage et les scripts de compatibilité 
+pour l'agent puppet, qui est le processus responsable de la configuration du nœud local. \\
+\\
+\bold{Package puppetmaster :} Ce paquet contient le script de démarrage et les scripts de 
+compatibilité pour le processus maître puppet, qui est le serveur hébergeant les manifests 
+et les fichiers pour les nœuds puppet.\\
+\\
+\bold{Package facter :} Bibliothèque dit \og cross-plateform\fg, qui permet 
+de collecter des informations sur le système. Particulièrement utile 
+dans la collecte d'un nom de système, d'adresse IP et/ou MAC, clé SSH.\\
+
+\subsection{\couleur{gray}{Configuration}}
+\subsubsection{\couleur{orange}{Côté Serveur}}
+Pour configurer le serveur, il faudra éditer le fichier de configuration \og puppet.conf\fg , ainsi
+que le fichier de hosts:
+\begin{verbatim}
+sudo nano /etc/puppet/puppet.conf
+sudo nano /etc/hosts
+\end{verbatim}
+Dans le premier, on y ajoute à la fin les lignes suivantes :
+\begin{verbatim}
+# /etc/puppet/puppet.conf
+[master]
+certname=puppetlabs
+\end{verbatim}
+Et dans le seconde fichier :
+\begin{verbatim}
+# /ect/hosts
+127.0.0.1		localhost
+192.168.1.67	puppetlabs
+\end{verbatim}
+Cela permet de spécifier le nom du \og \bold{Puppet Master}\fg .
+\subsubsection{\couleur{orange}{Côté Client}}
+Comme pour le serveur il faudra éditer les fichiers \bold{puppet.conf} 
+et \bold{hosts}:
+\begin{verbatim}
+# /etc/puppet/puppet.conf
+[main]
+server=puppetlabs
+
+# /ect/hosts
+127.0.0.1		localhost
+192.168.1.188	puppetclient
+192.168.1.67	puppetlabs
+\end{verbatim}
+Cela permet de définir le serveur maitre pour l'agent Puppet.
+
+\subsection{\couleur{gray}{Synchronisation}}
+
+Une fois l'installation et les configurations terminées, on lance le 
+serveur maitre via la commande :\\
+\begin{verbatim}
+sudo /etc/init.d/puppetmaster {start | stop | restart}
+\end{verbatim}
+Lors de la première installation le serveur est déjà démarrer. Sur la machine
+cliente, on lance une deuxième commande :
+\begin{verbatim}
+sudo puppet agent --test
+\end{verbatim}
+On obtient alors une demande de validation de certificat:
+\begin{verbatim}
+info: Creating a new certificate request for puppetclient
+info: Creating a new SSL key at /var/lib/puppet/ssl/private_keys/puppetclient.pem
+warning: peer certificate won't be verified in this SSL session
+notice: Did not receive certificate
+\end{verbatim}
+Sur le serveur il faut alors délivrer le certificat pour la machine client:
+\begin{verbatim}
+sudo puppet cert --list
+sudo puppet cert --sign puppetclient
+\end{verbatim}
+Pour avoir la liste complète des commandes: \bold{puppet help}.\\
+\\
+Une fois le certificat distribué, on relance la commande précédente et cette fois 
+apparait un nouveau message :
+\begin{verbatim}
+notice: Got signed certificate
+notice Stating Puppet client
+err: Could not retrieve catalog: Could not find default node or by name 
+with 'puppetclient' on node puppetclient.
+\end{verbatim}
+L'agent du client a bien été connecté avec le serveur mais n'a pas pu trouver 
+un catalogue pour le dit client. 
+
+\section{\couleur{midnight}{Manifests}}
+Pour que Puppet fonctionne nous devons lui dire quoi faire. 
+Ceci se fait grâce aux manifests.
+\subsection{\couleur{gray}{Qu'est ce qu'un manifest ?}}
+Les programmes de Puppet sont appelés «manifest», et ils utilisent 
+l'extension de fichier .pp. Le coeur du language Puppet est la 
+déclaration de ressources, qui représente l'état désiré d'une 
+ressource. Les Manifests peuvent également utiliser des instructions 
+conditionnelles, un groupe de ressources dans des collections, 
+générer du texte avec des fonctions, référencer du code dans d'autres 
+manifests, et bien d'autres choses, mais tout revient en dernière 
+analyse à faire en sorte que les bonnes ressources soient gérées de la 
+bonne façon.\\
+\\
+Avant d'être appliqués, les manifests sont compilés dans le catalogue, 
+qui est un graphe acyclique dirigé qui ne représente que les ressources 
+et l'ordre dans lequel elles doivent être synchronisées. Toute la 
+logique conditionnelle, la recherche de données, l'interpolation 
+de variables, et le regroupement de ressources calcule l'écart 
+lors de la compilation.\\
+\\
+Parmis les manifests deux sont importants. Lorsque le client consultera 
+le Puppet Master, l'agent lira les fichiers dans un certain ordre :
+\bi
+	\item le fichier /etc/puppet/manifests/site.pp qui dit à Puppet où 
+	et quelle configuration charger pour les clients. C'est dans ce 
+	fichier que nous ferons la déclaration des ressources, on 
+	spécifiera également d'importer les "nodes".\\
+	\begin{lstlisting}
+	import 'nodes.pp'
+	\end{lstlisting}
+	\item le fichier /etc/puppet/manifest/node.pp est lu lors de 
+	l'import. Dans ce fichier, nous renseignons les FQDN des clients 
+	ainsi que les modules qui leur sont associés.\\
+	\begin{lstlisting}
+	node 'oar-server.ptut-grid5000.lan' { include oar-server, apache, mysql }
+	\end{lstlisting}
+\ei
+\subsection{\couleur{gray}{Ressources}}
+Une ressource est un élément que Puppet sait configurer :\\
+\bi
+	\item file (contenu, permissions, propriétaire)
+	\item package (présence ou absence)
+	\item service (activation/désactivation, démarrage/arrêt)
+	\item exec(exécution commande)
+	\item cron, group, host, user etc …\\
+\ei
+Dans Puppet chaque ressource est identifiée par un nom, elle est composée d'un certain nombre d'attributs qui ont chacun une valeur.
+Le language de Puppet represente une ressource comme ceci:\\
+
+\begin{lstlisting}
+user { 'dave':
+	ensure     => present,
+	uid        => '507',
+	gid        => 'admin',
+	shell      => '/bin/zsh',
+	home       => '/home/dave',
+	managehome => true,
+}
+\end{lstlisting}
+
+\section{\couleur{midnight}{Modules}}
+\subsection{\couleur{gray}{Qu'est ce qu'un module ?}}
+Un module est une collection de manifests, ressources, fichiers, 
+templates, class et définitions. Un simple module contiendra tout ce 
+qui est requis pour configurer une application particulière.
+Par exemple il pourra contenir toutes les ressources spécifiées dans 
+le manifest, fichiers et configuration associée pour Apache. Chaque 
+module à besoin d'une structure de répertoire spécifique et d'un 
+fichier appelé init.pp. Cette structure autorise Puppet à charger 
+automatiquement les modules. Pour accomplir ce chargement automatique 
+Puppet vérifie une série de répertoires appelée le chemin de module
+(the module path en anglais). Le module path est configuré avec 
+l'option de configuration du module path dans la section [main] 
+de puppet.conf.\\
+\\
+Par défault, Puppet recherche des modules dans /etc/puppet/modules et /var/lib/puppet/modules.
+Si nécessaire on peut rajouter d'autres chemins.
+
+\subsection{\couleur{gray}{Structure d'un module}}
+
+Un module est définit de la façon suivante :\\
+\be
+	\item /etc/puppet/nom-du-module/manifests/ :\\
+		\bi
+			\item Le répertoire manifests contiendra notre fichier init.pp et tout autre configuration.
+			\item Le fichier init.pp est le coeur de notre module et chaque module doit en avoir un.
+			\item	Dans le fichier init.pp nous allons retrouver des classes qui seront instanciées lors de l'appel d'un agent. Dans ces classes on retrouve les configurations de référence.\\
+		\ei
+	\item /etc/puppet/nom-du-module/files/ :\\
+		\bi
+			\item Le répertoire files contiendra tous les fichiers que ne souhaitons utiliser comme une partie de notre module, par exemples des fichiers à "uploader". \\
+		\ei
+	\item /etc/puppet/nom-du-module/templates/ :\\
+		\bi
+			\item Le répertoire "templates" contiendra tous les templates que notre module pourrait utiliser.\\
+		\ei
+\ee
+\subsection{\couleur{gray}{Exemple concret de module}}
+Premièrement création de l'arborescence:\\
+\bi
+	\item \machine{mkdir  $-$p /etc/puppet/modules/mysql/\{files,templates,manifests\}}\\
+\ei
+Ensuite nous allons créer le fichier init.pp avec la commande suivante:\\
+\bi
+	\item \machine{touch /etc/puppet/modules/mysql/manifests/init.pp}\\
+\ei
+Une fois l'arborescence créée nous devons configurer le fichier init.pp comme ceci :
+\begin{lstlisting}
+import 'install.pp'
+import 'config.pp'
+import 'service.pp'
+
+class mysql {
+  include mysql::install,mysql::config,mysql::service
+}
+\end{lstlisting}
+
+Notre init.pp contient une seule class appelée mysql. A cela, on y ajoute trois fichiers
+install.pp, config.pp et service.pp contenant respectivement les class apache::install et apache::service.
+La class apache dit au puppetmaster d'aller executer les class inclusent.\\
+\\
+Les trois fichiers doivent se trouver dans le même dossier que le init.pp.\\
+
+\newpage
+
+Le premier fichier, install.pp, s'assure que les paquets MySQL-server, MySQL-client et Phpmyadmin sont bien installés.\\
+
+\begin{lstlisting}
+class mysql::install {
+  package { [ "mysql-server", "mysql-client", "phpmyadmin" ]:
+    ensure => present,
+    require => User["mysql"],
+  }
+
+  user {
+    "mysql":
+    ensure => present,
+    comment => "MySQL user",
+    gid => "mysql",
+    shell => "/bin/false",
+    require => Group["mysql"],
+  }
+  group { 
+    "mysql":
+    ensure => present,
+  }
+}
+\end{lstlisting}
+
+Il permet aussi de créé un utilisateur MySQL et un groupe MySQL auquel on donne les droits administrateurs sur MySQL.\\
+
+Le second fichier, config.pp, utilise la class mysql::config. 
+Elle est une class de type "ressource fichier". Elle permet de copier un fichier de configuration de MySQL prédéfinie.\\
+\begin{lstlisting}
+class mysql::config {
+  file {
+    "/etc/mysql/my.cnf":
+      source  => "puppet:///mysql/mysql-conf",
+      ensure  => file,
+      owner   => root,
+      group   => root,
+      mode    => 644,
+      notify  => Service["mysql"],
+      require => Class["mysql::install"];
+  }
+}
+\end{lstlisting}
+
+L'option "source" indique a Puppet où est situé le fichier. Généralement, il est situé
+dans le dossier files du module. Cependant, on ne spécifie pas tout le chemin d'accès.
+Juste le nom du module et nom du fichier. Puppet sait qu'il faudra directement chercher dans le dossier files.\\
+
+Les autres options permettent de définir le propriétaire, le groupe et les permissions du fichier.\\
+
+Le troisième fichier importé, service.pp, sert a vérifié que le service récemment installé.\\
+ 
+\begin{lstlisting}
+class mysql::service {
+  service { "mysql":
+    ensure		 => running,
+    hasstatus	 => true,
+    hasrestart => true,
+    enable		 => true,
+    require		 => Class["mysql::install"],
+  }
+}
+\end{lstlisting}
+
+\section{\couleur{midnight}{Complément à Puppet}}
+\subsection{\couleur{gray}{Puppet Dashboard}}
+\subsubsection{\couleur{orange}{Aperçu}}
+Puppet Dashboard est une application avec interface web permettant 
+d'afficher des informations sur le serveur Puppet et son environnement 
+(Master et Agents). Il permet de voir sur des graphes, les données répertoriées 
+d'un serveur Puppet ou de plusieurs (multi-puppet).\\
+\\
+Il fait aussi l'inventaire de données à partir des agents (à la façon d'un OCS inventory).\\
+\\
+Enfin, il peut être utilisé comme console de configuration pour le 
+serveur Puppet et de ses nodes (désignation des classes et/ou paramètres, etc...).\\
+\\
+ 
+\begin{figure}[htb]
+\begin{center}
+\includegraphics[scale=0.45]{images/dash.png}
+\end{center}
+\end{figure}
+
+\subsubsection{\couleur{orange}{Installation}}
+Comme tout Puppet, son installation est relativement simple puisqu'une ligne de commande 
+via l'APT est requise. Cependant le dépôt "Puppet Labs APT" doit être ajouté dans le fichier sources.list:
+\begin{verbatim}
+#/etc/apt/sources.list
+deb http://apt.puppetlabs.com/ubuntu lucid main
+deb-src http://apt.puppetlabs.com/ubuntu lucid main
+\end{verbatim}
+A fortiori, la clé GPG doit aussi être ajoutée :
+\begin{verbatim}
+sudo gpf --recv-key 4BD6EC30
+sudo gpg -a --export 4BD6EC30 > /tmp/key
+sudo apt-key add /tmp/key
+\end{verbatim} 
+Finalement, la commande pour l'installer via l'APT est :
+\begin{verbatim}
+sudo apt-get install puppet-dashboard
+\end{verbatim} 
+Pour se connecter à l'interface web on exécute la commande suivante puis 
+dans la barre navigation de son navigateur web, l'url qui suit :
+\begin{verbatim}
+sudo /etc/init.d/puppet-dashboard start
+http://puppetlabs:3000/
+\end{verbatim}
+\subsection{\couleur{gray}{The Foreman}}
+\subsubsection{\couleur{orange}{Introduction}}
+Une autre interface web pour Puppet est "The Foreman" ou "Foreman". Elle aussi est réalisée en Ruby. 
+Cette interface permet de montrer l'inventaire du parc informatique 
+basé sur Facter et donne des informations en temps réel sur le statut des 
+agents basées sur les "Puppet reports".\\
+\\
+Remarque: Contrairement à Puppet-Dashboard, developpé par l'équipe officielle 
+Puppetlabs, The Foreman a été conçu et réalisé par un fan indépendant bien avant Dashboard.
+
+ 
+\begin{figure}[htb]
+\begin{center}
+\includegraphics[scale=0.375]{images/foreman.png}
+\end{center}
+\end{figure}
+
+
+\subsubsection{\couleur{orange}{Installation}}
+l'installation est semblable aux autres avec là aussi un ajout de répertoire/clé 
+pour l'APT.
+\begin{verbatim}
+deb http://deb.theforeman.org/ stable main
+wget http://deb.theforeman.org/foreman.asc
+sudo apt-key add foreman.asc
+sudo apt-get install foreman-mysql
+
+sudo /etc/init.d/foreman start
+http://puppetlabs:3000/
+\end{verbatim}
+
+\subsection{\couleur{gray}{Puppet Module Tool}}
+\subsubsection{\couleur{orange}{Introduction}}
+Outre les deux interfaces web, \og Puppet Forge\fg , propose énormément de modules  
+qui peuvent permettre de faciliter le déploiement rapide d'une infrastructure 
+complexe. Ces modules sont configurés de telle sorte qu'il vous est facile de 
+les modifier s'il le faut.\\
+\\
+Les Modules peuvent être téléchargés ou installés manuellement, mais il 
+existe un "module manager", Puppet-module tool.\\
+\\
+Puppet-module tool permet de :
+\bi
+	\item Créer des squelettes pour vos futurs modules.
+	\item Chercher des modules déjà existants.
+	\item Installer et configurer des modules déjà existants.\\
+\ei
+
+\subsubsection{\couleur{orange}{Installation}}
+Le package de Puppet Module Tool a la particularité d'être exclusivement 
+dans le \og RubyGems repository\fg , cela rend plus simple son installation 
+sur différentes plateformes où RubyGems est installé.
+
+\begin{verbatim}
+sudo gem install puppet-module
+\end{verbatim}
+
+\subsubsection{\couleur{orange}{Utilisation}}
+Pour chercher un module déjà existant, on utilise la commande \og search\fg :
+\begin{verbatim}
+puppet-module search mysql
+\end{verbatim}
+On obtient alors un résultat comme ceci:
+
+Pour installer un des résultats trouvés, on utilise la command \og install\fg :
+\begin{verbatim}
+puppet-module install ghoneycutt/mysql
+\end{verbatim}
+nous obtenons ainsi un répertoire mysql :
+ 
+\begin{figure}[htb]
+\begin{center}
+\includegraphics[scale=0.5]{images/mysql.png}
+\end{center}
+\end{figure}
+
+
+
+% =====================================================================
+\chapter{Travail effectué}
+\section{\couleur{midnight}{Travail effectué}}
+\subsection{\couleur{gray}{blabla made in Quentin}}
+
+%======================================================================
+\chapter{Conclusion}
+
+
+\printindex
+
+
+\end{document}
