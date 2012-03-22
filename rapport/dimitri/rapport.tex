@@ -1,9 +1,113 @@
-\documentclass [10pt,a4paper]{report}
+\documentclass[a4paper, 10pt, onecolumn]{report}
 
 \usepackage[utf8]{inputenc}
+\usepackage[OT1]{fontenc}
+\usepackage[french]{babel}
+\usepackage[dvipsnames, table]{xcolor}
 \usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{calc}
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{array}
+\usepackage{rotating}
+\usepackage{hyperref}
+\usepackage{makeidx}
 \usepackage{listings}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+ 
+\lstset{ %
+  language=C++,                % the language of the code
+  basicstyle=\footnotesize,           % the size of the fonts that are used for the code
+  numbers=left,                   % where to put the line-numbers
+  numberstyle=\tiny\color{gray},  % the style that is used for the line-numbers
+  stepnumber=1,                   % the step between two line-numbers. If it's 1, each line 
+                                  % will be numbered
+  numbersep=10pt,                  % how far the line-numbers are from the code
+  backgroundcolor=\color{white},      % choose the background color. You must add \usepackage{color}
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  frame=single,                   % adds a frame around the code
+  rulecolor=\color{black},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
+  tabsize=2,                      % sets default tabsize to 2 spaces
+  captionpos=b,                   % sets the caption-position to bottom
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  title=\lstname,                   % show the filename of files included with \lstinputlisting;
+                                  % also try caption instead of title
+  keywordstyle=\color{midnight},          % keyword style
+  commentstyle=\color{dkgreen},       % comment style
+  stringstyle=\color{dkgreen},         % string literal style
+  escapeinside={\%*}{*)},            % if you want to add a comment within your code
+  morekeywords={*,present,installed,Group,User,running,Service,Class,...}               % if you want to add more keywords to the set
+}
+
+\hypersetup{
+colorlinks=true,
+linkcolor=midnight,           
+}
+
+\makeindex
+
 \begin{document}
+
+\newcommand{\bold}[1]{\textbf{#1}}
+\newcommand{\italic}[1]{\textit{#1}}
+\newcommand{\surligne}[1]{\underline{#1}}
+\newcommand{\couleur}[1]{\textcolor{#1}}
+\newcommand{\maj}[1]{\textsc{#1}}
+\newcommand{\machine}[1]{\texttt{#1}}
+\newcommand{\be}{\begin{enumerate}}
+\newcommand{\ee}{\end{enumerate}}
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\ei}{\end{itemize}}
+
+\pagenumbering{arabic}
+\xdefinecolor{midnight}{named}{MidnightBlue}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{André Dimitri, Quentin Dexheimer et Riwan Blondé}
+\rhead{\leftmark}
+\rfoot{\thepage}
+
+
+\begin{titlepage}
+
+\begin{center}
+
+
+\textsc{\LARGE Projet Tuteuré : \\Configuration automatique d'un cluster de calcul avec Puppet}
+\vfill
+
+
+
+\vfill
+
+\begin{minipage}{0.99\textwidth}
+\begin{flushleft} \large
+André \textsc{Dimitri}\\
+Quentin \textsc{Dexheimer}\\
+Riwan \textsc{Blonde}\\
+\end{flushleft}
+\end{minipage}
+\begin{minipage}{0.99\textwidth}
+\begin{flushright} \large
+{\large \today}
+\end{flushright}
+\end{minipage}
+
+
+\end{center}
+
+\end{titlepage}
+
+
+% =====================================================================
+
+\tableofcontents
+
 
 \chapter{Le Grid'5000}
 	\section{Présentation du Grid'5000}
@@ -37,14 +141,15 @@ Il existe donc une hiérarchie dans la plateforme Grid'5000. Au sommet de cette 
 		\subsection{Kadeploy3}
 			Kadeploy est un outil qui permet le déploiement des différents systèmes d'exploitation sur les noeuds de la plateforme. Il permet aussi de configurer les noeuds, de les cloner et de les manager. Il permet le déploiement de système Linux, BSD, Windows et Solaris.
 		\subsection{Taktuk}
-			Taktuk est un outil complémentaire à OAR2. Taktuk permet l'éxecution de commandes à distance sur un grand nombre de noeuds hétérogènes. Il met en place un liaison entre la "frontends" et les noeuds concernées par la commande et s'adapte  à l'environnement de la machine (les perfomances , la charges , le réseau ...). 
+			Taktuk est un outil complémentaire à OAR2. Taktuk permet l'éxecution de commandes à distance sur un grand nombre de noeuds hétérogènes. Il met en place un liaison entre la "frontends" et les noeuds concernées par la commande et s'adapte  à l'environnement de la machine (les perfomances , la charges , le réseau ...). \\
+			\surligne {Exemple :}\\ 
 			\begin{lstlisting}
 					taktuk -l root -s -m $puppet_master broadcast exec [ apt-get -q -y install puppet facter puppetmaster ]
-			
-			L'option -l permet d'utiliser le compte root pour l'installation.
-			L'option -m permet de déployer sur une seule machine alors que l'option -f permet de déployer sur toute les machines contenu dans le fichier.
-			Cette commande permet donc de déployer les paquets puppet, facter et puppetmaster sur la machine puppet\_master.
 			\end{lstlisting}
+			L'option -l permet d'utiliser le compte root pour l'installation.\\
+			L'option -m permet de déployer sur une seule machine alors que l'option -f permet de déployer sur toute les machines contenu dans le fichier.\\
+			Cette commande permet donc de déployer les paquets puppet, facter et puppetmaster sur la machine puppet\_master.
+			
 		\subsection{KaVLAN}
 			KaVLAN est un outil qui a pour but de permettre la mise en place d'un VLAN sur des noeuds du Grid5000. Il permet la mise en place de plusieurs type de VLAN : local, "router" et global. KaVLAN peut être utilisé en complément de Kadeploy et de OAR pour certains types d'expérimentation.\\
 			\begin{itemize}
@@ -62,10 +167,10 @@ Il existe donc une hiérarchie dans la plateforme Grid'5000. Au sommet de cette 
 					\item un serveur NFS (Network File System) pour permettre aux utilisateurs de stocker des informations dans leur /home sur les
  différents sites.
  					\item des  outils de supervision : \begin{itemize}
- 															\item Nagios : surveille les hôtes et services spécifiés, alertant lorsque les systèmes vont mal et quand ils vont mieux.
- 															\item Ganglia : permet de superviser des clusters et des grilles informatiques. 
- 															\item Munin : présente ses résultats sous forme de graphiques disponibles via une interface web.
- 															\item Cacti : mesure les performances réseau et serveur.
+ 															\item 	Nagios : surveille les hôtes et services spécifiés, alertant lorsque les systèmes vont mal et quand ils vont mieux.
+ 															\item 	Ganglia : permet de superviser des clusters et des grilles informatiques. 
+ 															\item 	Munin : présente ses résultats sous forme de graphiques disponibles via une interface web.
+ 															\item 	Cacti : mesure les performances réseau et serveur.
  														\end{itemize}
  					\item un serveur weathermap : qui permet la visualisation du réseau sous forme d'une carte.
  					\item un serveur syslog : qui permet les journaux d'évènements.
