@@ -112,7 +112,7 @@ Riwan \textsc{Blonde}\\
 \chapter{Le Grid'5000}
 	\section{Présentation du Grid'5000}
 	
-Le Grid'5000 est une grille informatique destinée à la recherche scientifique. Le plateforme a vu le jour en 2003 et a pour but de promouvoir la recherche sur les grilles informatiques en France. Le Grid'5000 est aujourd'hui composé de 1200 noeuds répartis sur 9 sites différents situés en France et au Luxembourg et interconnectés avec le réseau Réseau National de télécommunications pour la Technologie l'Enseignement et la Recherche (RENATER). L'objectif du Grid'5000 est de permettre aux scientifiques d'effectuer des expériences dans le domaine des systèmes informatiques et des réseaux distribués dans un environnement hétérogène aussi proche de la réalité que possible.
+Le Grid'5000 est une grille informatique destinée à la recherche scientifique, la plateforme Grid'5000 fait partie de l'action de développement technique Aladin . Le plateforme a vu le jour en 2003 et a pour but de promouvoir la recherche sur les grilles informatiques en France. Le Grid'5000 est aujourd'hui composé de 1200 noeuds répartis sur 9 sites différents situés en France et au Luxembourg et interconnectés avec le réseau Réseau National de télécommunications pour la Technologie l'Enseignement et la Recherche (RENATER). L'objectif du Grid'5000 est de permettre aux scientifiques d'effectuer des expériences dans le domaine des systèmes informatiques et des réseaux distribués dans un environnement hétérogène aussi proche de la réalité que possible.
 
 	\begin{figure}[!h]
 		\centering
@@ -126,7 +126,7 @@ A l'intérieur de chaque cluster se trouvent des ordinateurs aussi appelés "nod
  Les noeuds de services servent à l'administration des machines situées dans les cluster et à l'accès aux hôtes virtuels pour les administrateurs. Les machines de services sont commune aux différents clusters situées sur les sites. Certains noeuds de services appelés "frontends" sont utilisés par les utilisateurs pour accéder aux différents sites grâce au protocole ssh, la réservation de noeuds et le déploiement. \\
 L'administration de la plateforme est centralisée et est assurée par 8 personnes parmis elle certains travaille à plein temps sur la plateforme alors que d'autres non.\\
 Il existe donc une hiérarchie dans la plateforme Grid'5000. Au sommet de cette hiérarchie se trouve la plateforme en elle m\^me ensuite les différents sites géographique. Au niveau inférieur on trouve les différents services et clusters puis les noeuds.  Ensuite on trouve les CPUS et enfin les cores.
-\begin{figure}[!h]
+	\begin{figure}[!h]
 		\centering
    		\includegraphics[width=5cm,height=5cm]{griffon.jpeg}
    		\caption{Un des clusters de Nancy : Griffon}
@@ -136,8 +136,23 @@ Il existe donc une hiérarchie dans la plateforme Grid'5000. Au sommet de cette 
 	\section{Les outils du Grid'5000}
 		Le Grid'5000 est composé de plusieurs services: une partie ces services ont été développés uniquement pour cette plateforme comme par exemple Kadeploy3 qui a été developpé par l'INRIA Nancy - Grand Est; les autres sont des services standard déjà utilisés sur les systèmes Unix.  
 		\subsection{OAR2}			
-			OAR est un gestionnaire de ressources pour de grandes grilles informatique. Il est écrit en PERL et s'appuie sur une base SQL (PostgreSQL ou MySQL). OAR permet le déploiement, la réservation  et le management des noeuds et des jobs \footnote{un job correspond à une t\^ache affectée à une reservation}. OAR permet aussi d'effectuer des réservations planifiées de jobs pour une durée donnée en utilisant un nombre défini de noeuds. \\
-			
+			OAR est un gestionnaire de ressources pour de grandes grilles informatique. Il est écrit en PERL et s'appuie sur une base SQL (PostgreSQL ou MySQL). OAR permet le déploiement, la réservation  et le management des noeuds et des jobs \footnote{un job correspond à une t\^ache affectée à une reservation}.\\
+			Les principales fonctionnalités d'OAR sont les suivantes :  \\
+			\begin{itemize}
+				\item Soumission : Le système décide du moment où votre travail commence afin d'optimiser l'ordonnancement global de la plateforme. S'il n'y a pas de noeud disponible, le travail est mis en attente. (correspond à oarsub-I ou oarsub scriptName syntaxes)\\
+
+				\item Réservation préalable: On décide alors quand le travail doit commencer, les ressources fournies seront disponibles à la date spécifiée. Si les ressources demandées sont disponibles au moment du début du job la réservation est s'effectue sinon la réservation échoue et il faut alors modifier les paramètres de la réservation. (correspond à oarsub-r date ou oarsub-R Date syntaxes scriptName)\\
+
+				\item Mode interactif : On n'éxecute pas de script lors de la soumission ou lors de la réservation mais on choisit de travailler de facon intéractive. (correspond à oarsub-I pour la soumission ou oarsub-r jour; oarsub-C jobid pour la réservation)\\
+
+				\item Mode passif : On choisit d'éxecuter directement un script sur les noeuds réserver. Il n'est alors pas obligatoire de se connecter sur les noeuds mais cela est toujours possible en utilisant oarsub-C jobid). (correspond à oarsub scriptName pour la soumission ou oarsub -r date scriptName pour la réservation)\\
+				\item Type de job possible :  \\ \begin{itemize}
+     											\item défaut: on utilise juste l'environnement par défaut des noeuds.
+     											\item déployement: on déploit un système d'exploitation définis lors de la réservation. Cette méthode utilise l'outils Kadeploy.
+     											\item Il existe un autre type de job , destinée aux utilisateurs avancées.
+     										\end{itemize}
+     		\end{itemize}
+      			
 		\subsection{Kadeploy3}
 			Kadeploy est un outil qui permet le déploiement des différents systèmes d'exploitation sur les noeuds de la plateforme. Il permet aussi de configurer les noeuds, de les cloner et de les manager. Il permet le déploiement de système Linux, BSD, Windows et Solaris.
 		\subsection{Taktuk}

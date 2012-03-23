@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.3.8)  22 MAR 2012 15:47
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.3.8)  23 MAR 2012 15:21
 entering extended mode
  %&-line parsing enabled.
 **rapport.tex
@@ -668,55 +668,80 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 [2
 
  <./map.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 139--140
+Underfull \hbox (badness 10000) in paragraph at lines 139--141
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 144--146
+Underfull \hbox (badness 10000) in paragraph at lines 142--143
 
  []
 
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 147.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 147.
 
-Underfull \hbox (badness 10000) in paragraph at lines 154--155
+Underfull \hbox (badness 10000) in paragraph at lines 144--145
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 146--147
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 148--149
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 149--149
 
  []
 
 [3 <./griffon.jpeg>]
-Underfull \hbox (badness 10000) in paragraph at lines 158--159
+Underfull \hbox (badness 10000) in paragraph at lines 160--162
+
+ []
+
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 163.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 163.
+
+Underfull \hbox (badness 10000) in paragraph at lines 170--171
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 160--161
+Underfull \hbox (badness 10000) in paragraph at lines 174--175
 
  []
 
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 162.
+
+Underfull \hbox (badness 10000) in paragraph at lines 176--177
+
+ []
+
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 178.
 
 (/usr/share/texmf-texlive/tex/latex/base/omscmr.fd
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <8> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 162.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 178.
 
-Underfull \hbox (badness 10000) in paragraph at lines 164--166
+Underfull \hbox (badness 10000) in paragraph at lines 180--182
 
  []
 
 [4] [5] (./rapport.aux) ) 
 Here is how much of TeX's memory you used:
- 8370 strings out of 495061
- 113525 string characters out of 1182622
- 271808 words of memory out of 3000000
- 11387 multiletter control sequences out of 15000+50000
+ 8368 strings out of 495061
+ 113502 string characters out of 1182622
+ 296808 words of memory out of 3000000
+ 11385 multiletter control sequences out of 15000+50000
  9096 words of font info for 32 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
- 41i,12n,58p,719b,1299s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 41i,12n,58p,804b,1299s stack positions out of 5000i,500n,10000p,200000b,50000s
 </usr/share/texmf-texlive/fonts/type1/public/amsfonts/
 cm/cmbx10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmbx12.p
 fb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/s
@@ -725,7 +750,7 @@ exlive/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-texlive/fonts
 /type1/public/amsfonts/cm/cmr5.pfb></usr/share/texmf-texlive/fonts/type1/public
 /amsfonts/cm/cmr7.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/
 cmr8.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
-Output written on rapport.pdf (6 pages, 5275520 bytes).
+Output written on rapport.pdf (6 pages, 5276524 bytes).
 PDF statistics:
  131 PDF objects out of 1000 (max. 8388607)
  28 named destinations out of 1000 (max. 500000)
