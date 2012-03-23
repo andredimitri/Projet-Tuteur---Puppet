@@ -13,6 +13,7 @@
 \usepackage{hyperref}
 \usepackage{makeidx}
 \usepackage{listings}
+\usepackage{hyperref}
 
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
@@ -112,7 +113,7 @@ Riwan \textsc{Blonde}\\
 \chapter{Le Grid'5000}
 	\section{Présentation du Grid'5000}
 	
-Le Grid'5000 est une grille informatique destinée à la recherche scientifique, la plateforme Grid'5000 fait partie de l'action de développement technique Aladin . Le plateforme a vu le jour en 2003 et a pour but de promouvoir la recherche sur les grilles informatiques en France. Le Grid'5000 est aujourd'hui composé de 1200 noeuds répartis sur 9 sites différents situés en France et au Luxembourg et interconnectés avec le réseau Réseau National de télécommunications pour la Technologie l'Enseignement et la Recherche (RENATER). L'objectif du Grid'5000 est de permettre aux scientifiques d'effectuer des expériences dans le domaine des systèmes informatiques et des réseaux distribués dans un environnement hétérogène aussi proche de la réalité que possible.
+Le Grid'5000 est une grille informatique ou grille de calcul\footnote{GLOSSAIRE !!!!grille de calcul infrastructure logicielle et matérielle qui procure à un utilisateur final un accès à des capacités de calcul et de stockage de masse hautement distribué.} destinée à la recherche scientifique, la plateforme Grid'5000 fait partie de l'action de développement technique Aladin . Le plateforme a vu le jour en 2003 et a pour but de promouvoir la recherche sur les grilles informatiques en France. Le Grid'5000 est aujourd'hui composé de 1200 noeuds répartis sur 9 sites différents situés en France et au Luxembourg et interconnectés avec le réseau Réseau National de télécommunications pour la Technologie l'Enseignement et la Recherche (RENATER). L'objectif du Grid'5000 est de permettre aux scientifiques d'effectuer des expériences dans le domaine des systèmes informatiques et des réseaux distribués dans un environnement hétérogène aussi proche de la réalité que possible.
 
 	\begin{figure}[!h]
 		\centering
@@ -135,7 +136,13 @@ Il existe donc une hiérarchie dans la plateforme Grid'5000. Au sommet de cette 
 	
 	\section{Les outils du Grid'5000}
 		Le Grid'5000 est composé de plusieurs services: une partie ces services ont été développés uniquement pour cette plateforme comme par exemple Kadeploy3 qui a été developpé par l'INRIA Nancy - Grand Est; les autres sont des services standard déjà utilisés sur les systèmes Unix.  
-		\subsection{OAR2}			
+		\subsection{OAR2}	
+		\begin{figure}[!h]
+			\centering
+   			\includegraphics[width=4cm,height=4cm]{oar_logo.png}
+   			\caption{Le logo du projet OAR}
+    		\label{fig:oar}
+		\end{figure} 		
 			OAR est un gestionnaire de ressources pour de grandes grilles informatique. Il est écrit en PERL et s'appuie sur une base SQL (PostgreSQL ou MySQL). OAR permet le déploiement, la réservation  et le management des noeuds et des jobs \footnote{un job correspond à une t\^ache affectée à une reservation}.\\
 			Les principales fonctionnalités d'OAR sont les suivantes :  \\
 			\begin{itemize}
@@ -154,8 +161,33 @@ Il existe donc une hiérarchie dans la plateforme Grid'5000. Au sommet de cette 
      		\end{itemize}
       			
 		\subsection{Kadeploy3}
+		
+		\begin{figure}[!h]
+			\centering
+   			\includegraphics[width=5cm,height=2cm]{kadeploy.jpeg}
+   			\caption{Le logo du projet Kadeploy}
+    		\label{fig:kadeploy}
+		\end{figure} 
 			Kadeploy est un outil qui permet le déploiement des différents systèmes d'exploitation sur les noeuds de la plateforme. Il permet aussi de configurer les noeuds, de les cloner et de les manager. Il permet le déploiement de système Linux, BSD, Windows et Solaris.
+			
+			Kadeploy3 est composé de 8 outils  : \\
+				\begin{itemize}
+					\item kadeploy client : l'interface utilisateur pour Kadeploy.
+					\item kaenv : permet d'avoir les information concernant l'environnement des noeuds 
+					\item kareboot : permet de rédemarrer les noeuds et de définir des paramètres à utiliser lors ud redemarrage.
+					\item kastat : permet de connaitre les performances concernat les noeuds
+					\item kaconsole : permet d'ouvrir une console sur un noeud distant.
+					\item kanodes : permet de'avoir des informations copncernant les noeuds 
+					\item kapower : permet  d'allumer et d'éteindre des noeuds et de connaitre le statut des noeuds (allumer/eteind)
+					\item karights : permet de modifier les droits des utilisateurs sur les noeuds.
+				\end{itemize}
 		\subsection{Taktuk}
+		\begin{figure}[!h]
+			\centering
+   			\includegraphics[width=5cm,height=2cm]{TakTuk_Logo.png}
+   			\caption{Le logo du projet TakTuk}
+    		\label{fig:TakTuk}
+		\end{figure} 
 			Taktuk est un outil complémentaire à OAR2. Taktuk permet l'éxecution de commandes à distance sur un grand nombre de noeuds hétérogènes. Il met en place un liaison entre la "frontends" et les noeuds concernées par la commande et s'adapte  à l'environnement de la machine (les perfomances , la charges , le réseau ...). \\
 			\surligne {Exemple :}\\ 
 			\begin{lstlisting}
@@ -218,5 +250,20 @@ Il existe donc une hiérarchie dans la plateforme Grid'5000. Au sommet de cette 
  					\item une infrastructure de virtualisation XEN comportant de 2 à 5 dom0 et environ 30 domU avec un service par domU.
  					
 				\end{itemize}
-	
+
+\begin{thebibliography}{99}
+\bibitem{ref} https://www.grid5000.fr/mediawiki/index.php/Grid5000:Home
+\bibitem{ref} http://kadeploy3.gforge.inria.fr/
+\bibitem{ref} http://oar.imag.fr/
+\bibitem{ref} http://taktuk.gforge.inria.fr/
+\bibitem{Pro.puppet}
+        Pro Puppet
+		James Turnbull , Jeffrey McCune 
+        Apress
+        2011.
+
+
+          
+\end{thebibliography}
+
 \end{document}

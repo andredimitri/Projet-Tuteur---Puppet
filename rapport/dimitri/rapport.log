@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.3.8)  23 MAR 2012 15:21
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.3.8)  23 MAR 2012 17:09
 entering extended mode
  %&-line parsing enabled.
 **rapport.tex
@@ -538,32 +538,42 @@ File: lstlang1.sty 2004/09/05 1.3 listings language file
 (/usr/share/texmf-texlive/tex/latex/listings/lstmisc.sty
 File: lstmisc.sty 2007/02/22 1.4 (Carsten Heinz)
 )
-Package hyperref Info: Option `colorlinks' set `true' on input line 50.
+Package hyperref Info: Option `colorlinks' set `true' on input line 51.
 \@indexfile=\write3
 \openout3 = `rapport.idx'.
 
 
 Writing index file rapport.idx
-(./rapport.aux)
+(./rapport.aux
+
+LaTeX Warning: Label `ref' multiply defined.
+
+
+LaTeX Warning: Label `ref' multiply defined.
+
+
+LaTeX Warning: Label `ref' multiply defined.
+
+)
 \openout1 = `rapport.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Info: Redefining \degres on input line 54.
-LaTeX Info: Redefining \dots on input line 54.
-LaTeX Info: Redefining \up on input line 54.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Info: Redefining \degres on input line 55.
+LaTeX Info: Redefining \dots on input line 55.
+LaTeX Info: Redefining \up on input line 55.
  (/usr/share/texmf-texlive/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count115
@@ -618,7 +628,7 @@ driver: pdftex
 
 (1in=72.27pt, 1cm=28.45pt)
 -----------------------
-Package hyperref Info: Link coloring ON on input line 54.
+Package hyperref Info: Link coloring ON on input line 55.
 (/usr/share/texmf-texlive/tex/latex/hyperref/nameref.sty
 Package: nameref 2007/05/29 v2.31 Cross-referencing by name of section
 
@@ -627,8 +637,8 @@ Package: refcount 2008/08/11 v3.1 Data extraction from references (HO)
 )
 \c@section@level=\count120
 )
-LaTeX Info: Redefining \ref on input line 54.
-LaTeX Info: Redefining \pageref on input line 54.
+LaTeX Info: Redefining \ref on input line 55.
+LaTeX Info: Redefining \pageref on input line 55.
  (./rapport.out)
 (./rapport.out)
 \@outlinefile=\write4
@@ -637,9 +647,9 @@ LaTeX Info: Redefining \pageref on input line 54.
 \AtBeginShipoutBox=\box30
 \c@lstlisting=\count121
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 94.
+(Font)              <7> on input line 95.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 94.
+(Font)              <5> on input line 95.
  [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
@@ -651,15 +661,15 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.112 \chapter
+l.113 \chapter
               {Le Grid'5000} [1
 
 ]
 Chapitre 1.
-<map.png, id=57, 463.67287pt x 428.61119pt>
+<map.png, id=58, 463.67287pt x 428.61119pt>
 File: map.png Graphic file (type png)
  <use map.png>
-<griffon.jpeg, id=59, 4609.22pt x 3067.46pt>
+<griffon.jpeg, id=60, 4609.22pt x 3067.46pt>
 File: griffon.jpeg Graphic file (type jpg)
  <use griffon.jpeg>
 
@@ -667,92 +677,128 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 [2
 
- <./map.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 139--141
+ <./map.png>] <oar_logo.png, id=70, 323.2075pt x 236.885pt>
+File: oar_logo.png Graphic file (type png)
+
+<use oar_logo.png>
+Underfull \hbox (badness 10000) in paragraph at lines 146--148
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 142--143
+Underfull \hbox (badness 10000) in paragraph at lines 149--150
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 144--145
+Underfull \hbox (badness 10000) in paragraph at lines 151--152
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 146--147
+Underfull \hbox (badness 10000) in paragraph at lines 153--154
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 148--149
+Underfull \hbox (badness 10000) in paragraph at lines 155--156
 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 149--149
+[3 <./griffon.jpeg> <./oar_logo.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 156--156
 
  []
 
-[3 <./griffon.jpeg>]
-Underfull \hbox (badness 10000) in paragraph at lines 160--162
+<kadeploy.jpeg, id=80, 222.8325pt x 55.20625pt>
+File: kadeploy.jpeg Graphic file (type jpg)
+ <use kadeploy.jpeg>
+Underfull \hbox (badness 10000) in paragraph at lines 173--174
+
+ []
+
+<TakTuk_Logo.png, id=81, 610.28pt x 145.54375pt>
+File: TakTuk_Logo.png Graphic file (type png)
+ <use TakTuk_Logo.png>
+Underfull \hbox (badness 10000) in paragraph at lines 191--193
 
  []
 
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 163.
+(Font)              <8> on input line 194.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 163.
-
-Underfull \hbox (badness 10000) in paragraph at lines 170--171
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 174--175
+(Font)              <6> on input line 194.
+[4 <./kadeploy.jpeg> <./TakTuk_Logo.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 201--202
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 176--177
+Underfull \hbox (badness 10000) in paragraph at lines 205--206
 
  []
 
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 178.
+
+Underfull \hbox (badness 10000) in paragraph at lines 207--208
+
+ []
+
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 209.
 
 (/usr/share/texmf-texlive/tex/latex/base/omscmr.fd
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <8> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 178.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 209.
 
-Underfull \hbox (badness 10000) in paragraph at lines 180--182
+Underfull \hbox (badness 10000) in paragraph at lines 211--213
 
  []
 
-[4] [5] (./rapport.aux) ) 
+[5] [6] [7
+
+pdfTeX warning (ext4): destination with the same identifier (name{cite.ref}) ha
+s been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.269 \end{document}
+                    pdfTeX warning (ext4): destination with the same identifier
+ (name{cite.ref}) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.269 \end{document}
+                    pdfTeX warning (ext4): destination with the same identifier
+ (name{cite.ref}) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.269 \end{document}
+                    ] (./rapport.aux)
+
+LaTeX Warning: There were multiply-defined labels.
+
+ ) 
 Here is how much of TeX's memory you used:
- 8368 strings out of 495061
- 113502 string characters out of 1182622
- 296808 words of memory out of 3000000
- 11385 multiletter control sequences out of 15000+50000
+ 8399 strings out of 495061
+ 113919 string characters out of 1182622
+ 270778 words of memory out of 3000000
+ 11404 multiletter control sequences out of 15000+50000
  9096 words of font info for 32 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
- 41i,12n,58p,804b,1299s stack positions out of 5000i,500n,10000p,200000b,50000s
-</usr/share/texmf-texlive/fonts/type1/public/amsfonts/
-cm/cmbx10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmbx12.p
-fb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/s
-hare/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-t
-exlive/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-texlive/fonts
-/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texmf-texlive/fonts/type1/public
-/amsfonts/cm/cmr7.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/
-cmr8.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
-Output written on rapport.pdf (6 pages, 5276524 bytes).
+ 41i,12n,58p,1034b,1299s stack positions out of 5000i,500n,10000p,200000b,50000s
+</usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/sha
+re/texmf-texlive/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-te
+xlive/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texmf-texlive/font
+s/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-texlive/fonts/type1/publ
+ic/amsfonts/cm/cmr12.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/
+cm/cmr5.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr7.pfb><
+/usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/te
+xmf-texlive/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
+Output written on rapport.pdf (8 pages, 5402745 bytes).
 PDF statistics:
- 131 PDF objects out of 1000 (max. 8388607)
- 28 named destinations out of 1000 (max. 500000)
- 75 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 158 PDF objects out of 1000 (max. 8388607)
+ 37 named destinations out of 1000 (max. 500000)
+ 90 words of extra memory for PDF output out of 10000 (max. 10000000)
 
