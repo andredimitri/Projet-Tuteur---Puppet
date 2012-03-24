@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.3.8)  23 MAR 2012 17:09
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.3.8)  24 MAR 2012 12:51
 entering extended mode
  %&-line parsing enabled.
 **rapport.tex
@@ -717,6 +717,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 173--174
 
  []
 
+
+Overfull \hbox (3.53433pt too wide) in paragraph at lines 177--178
+[]\OT1/cmr/m/n/10 kareboot : per-met de red^^Semarrer les noeuds et de d^^Sefin
+ir des param^^Retres ^^Ra utiliser lors du red^^Semarrage. 
+ []
+
 <TakTuk_Logo.png, id=81, 610.28pt x 145.54375pt>
 File: TakTuk_Logo.png Graphic file (type png)
  <use TakTuk_Logo.png>
@@ -762,29 +768,35 @@ s been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.269 \end{document}
+l.270 \end{document}
                     pdfTeX warning (ext4): destination with the same identifier
  (name{cite.ref}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.269 \end{document}
+l.270 \end{document}
                     pdfTeX warning (ext4): destination with the same identifier
  (name{cite.ref}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.269 \end{document}
+l.270 \end{document}
+                    pdfTeX warning (ext4): destination with the same identifier
+ (name{cite.ref}) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.270 \end{document}
                     ] (./rapport.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 8399 strings out of 495061
- 113919 string characters out of 1182622
+ 8400 strings out of 495061
+ 113928 string characters out of 1182622
  270778 words of memory out of 3000000
- 11404 multiletter control sequences out of 15000+50000
+ 11405 multiletter control sequences out of 15000+50000
  9096 words of font info for 32 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
  41i,12n,58p,1034b,1299s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -796,7 +808,7 @@ ic/amsfonts/cm/cmr12.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/
 cm/cmr5.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr7.pfb><
 /usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/te
 xmf-texlive/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
-Output written on rapport.pdf (8 pages, 5402745 bytes).
+Output written on rapport.pdf (8 pages, 5402834 bytes).
 PDF statistics:
  158 PDF objects out of 1000 (max. 8388607)
  37 named destinations out of 1000 (max. 500000)
