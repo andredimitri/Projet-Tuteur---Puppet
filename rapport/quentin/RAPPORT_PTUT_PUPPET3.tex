@@ -168,7 +168,14 @@ done
 		\end{figure}
 \newpage
 			\subsection{Le logiciel OAR.}
-			Comme expliqué plus haut, OAR se décompose ici en deux parties : le serveur et la frontend. Ces deux modules nécessitent un certain nombre de paramètres qui lui permettent de fonctionner :
+			Comme expliqué plus haut, OAR se décompose ici en deux parties : le serveur et la frontend. 
+		\begin{figure}[!h]
+			\centering
+			\includegraphics[scale=0.8]{modoar.jpg}
+			\caption{Deux modules pour OAR : Le serveur, et la frontend.}	
+			\label{OAR Server et OAR Frontend.}
+		\end{figure}
+			\\Ces deux modules nécessitent un certain nombre de paramètres qui lui permettent de fonctionner :
 				\begin{itemize}
 					\item Une communication SSH qui permettent à la frontend de se connecter directement sur le serveur et inversement ;
 					\item Le fichier de dép\^ot de logiciels d'OAR.
@@ -177,9 +184,16 @@ done
 				L'ensemble de cette configuration, déployée à l'identique sur le frontend et le serveur, est définie par une classe située dans le fichier install.pp de chaque module OAR. 
 
 			\subsubsection{Le module OAR-frontend.}
-			Il est configuré par deux programmes : les fichiers prologue et epilogue. Par défaut, ils nécessitent absolument une configuration manuelle.
+			Il est configuré par deux programmes : les fichiers prologue et epilogue. Ils nécessitent absolument une configuration manuelle car vierges par défaut.
+			Tout comme le serveur OAR, le frontend est configuré par deux scripts puppet, l'un permettant d'initialiser le module, l'autre se contentant de vérifier et d'adapter la configration sur le client Puppet.
+		\begin{figure}[!h]
+			\centering
+			\includegraphics[scale=0.7]{fich_ins.png}
+			\caption{Deux scripts d'installation pour chaque module OAR : L'initialisation, qui appelle l'installation.}
+			\label{Installation OAR}
+		\end{figure}
 			\subsubsection{Le module OAR-server.}
-		Le serveur OAR dépend activement d'une base de données, en l'occurence ici une base mysql. Cette base est configurée dans le fichier oar.conf, que nous allons copier depuis le maître Puppet vers le client.
+		Le serveur OAR dépend activement d'une base de données, en l'occurence ici une base mysql, afin de gérer les noeuds. Cette base est localisée et configurée dans le fichier oar.conf, que nous allons copier depuis le maître Puppet vers le client.
 		Deux autres fichiers de configuration sont nécesaires pour le serveur OAR. Il s'agit de : \begin{itemize}
 		\item Monika.conf, qui permet de montrer les jobs soumis par la frontend au serveur ainsi que l'état de chaque noeud ;
 		\item drawgantt.conf, qui permet de présenter les différentes tâches dans le temps suivant un Diagramme de Gantt.
@@ -189,5 +203,21 @@ Le serveur OAR nécessite également plusieurs autres services :
 \item un serveur Web du type apache2 sur la machine déployée ;
 \item une base de données de type mysql ou postgre qui peut être sur une autre machine.
 \end{itemize}
-
+			\subsection{Le module Kadeploy3.}
+			Ce module est installé par Puppet à l'aide de 5 fichiers de scripts Puppet. Cela permet de définir simplement ce qu'un client et un serveur doivent récupérer.
+		\begin{figure}[!h]
+			\centering
+			\includegraphics[scale=0.7]{fich_kade.png}
+			\caption{Un dossier contenant la configuration pour kadeploy3, et les fichiers nécessaires à sa bonne installation.}
+			\label{Installation kadeploy3}
+		\end{figure}
+			\newpage Kadeploy3 possède son propre dép\^ot qu'il faut ajouter pour pouvoir l'installer. il utilise également une base de données créé et configurée par Puppet à l'aide des fichiers db\_ creation.sql et init\_ deploy3-db. Nous rajoutons également le fichier authorized\_ keys de manière à permettre une communication SSH. Dans le dossier conf des fichers utiles à la configuration de kadeploy par Puppet, nous retrouvons les fichiers qui permettent d'indiquer le nom du cluster, les partitions à appliquer, les commandes spécifiques pour certains n\oe uds, etc.
+			\subsection{Le Puppet Dashboard.}
+			C'est une fonctionnalité qui n'était pas prévue intialement dans le projet, mais plut\^ot considéré comme un extra.
+			Il nécessite d'installer la clé publique pour le dép\^ot du Dashboard, qui n'est pas inclus par défaut dans les dép\^ots logiciels du Grid5000.
+			Nous nous assurons le bon fonctionnement du module sur le n\oe ud au travers de 4 scripts Puppet, qui permettent d'installer, de configurer et de lancer le puppet dashboard.
+			\subsection{Les autres modules.}
+			D'autres modules ont d\^u \^etre définis pour assurer le bon fonctionnement des outils utilisés. Nous avons donc réalisé ces modules en se basant sur des exemples fournis par le site de Puppet, que nous avons réadapté avec une configuration adaptée à nos besoins. Cela nous a permis d'installer ces services très rapidement, avec la souplesse d'utilisation de ces modules.
+			\section{Les problèmes rencontrés.}
+			Quelques problèmes se sont présentés durant les 6 semaines de projet. beaucoup de problèmes posés avec l'utilisation de taktuk. Cela était principalement d\^u à la ocnfiguration spécifique des n\oe uds dans un VLAN, nous demandant alors de créer un tunnel SSH avec la machine locale pour permettre d'installer nos services.
 \end{document}
